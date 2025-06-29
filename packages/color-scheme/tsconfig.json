@@ -3,6 +3,8 @@
     "target": "ES2020",
     "module": "preserve",
     "lib": ["ES2020", "DOM"],
+    "moduleResolution": "bundler",
+    "verbatimModuleSyntax": true,
     "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,

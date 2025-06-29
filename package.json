@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "description": "A collection of utility libraries",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npm run test --workspaces",
     "build": "npm run build --workspaces",
     "dev": "npm run dev --workspaces",
     "lint": "npm run lint --workspaces",
@@ -21,9 +21,18 @@
   "author": "Dazl",
   "license": "MIT",
   "devDependencies": {
-    "@types/react": "^19.1.8",
+    "@playwright/browser-chromium": "^1.53.1",
+    "@types/chai": "^5.2.2",
     "@types/node": "^24.0.7",
+    "@types/react": "^19.1.8",
+    "chai": "^5.2.0",
+    "esbuild": "^0.25.5",
+    "mocha": "^11.7.1",
+    "mocha-web": "^2.3.0",
     "react": "^19.1.0",
     "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "@types/mocha": "^10.0.10"
   }
 }
