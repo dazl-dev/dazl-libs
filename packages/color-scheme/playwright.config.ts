@@ -10,7 +10,6 @@ export default defineConfig({
   reporter: 'line',
   use: {
     trace: 'on-first-retry',
-    headless: false,
   },
 
   projects: [
