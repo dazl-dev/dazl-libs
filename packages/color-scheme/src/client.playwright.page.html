@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <meta charset="UTF-8" />
@@ -21,12 +21,8 @@
       function updateDisplay() {
         const api = window.colorSchemeApi;
         document.getElementById('config').textContent = `Config: ${api.config}`;
-        document.getElementById(
-          'resolved'
-        ).textContent = `Resolved: ${api.currentState.resolved}`;
-        document.getElementById(
-          'resolved-system'
-        ).textContent = `System: ${api.resolvedSystem}`;
+        document.getElementById('resolved').textContent = `Resolved: ${api.currentState.resolved}`;
+        document.getElementById('resolved-system').textContent = `System: ${api.resolvedSystem}`;
       }
 
       // Initial display update
@@ -34,9 +30,7 @@
 
       // Subscribe to changes
       window.colorSchemeApi.subscribe((state) => {
-        document.getElementById(
-          'subscription-calls'
-        ).textContent += `\n${JSON.stringify(state)}`;
+        document.getElementById('subscription-calls').textContent += `\n${JSON.stringify(state)}`;
         updateDisplay();
       });
     </script>

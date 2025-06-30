@@ -2,13 +2,15 @@
   "name": "dazl-libs",
   "private": true,
   "version": "1.0.0",
+  "type": "module",
   "description": "A collection of utility libraries",
   "scripts": {
     "test": "npm run test --workspaces",
     "build": "npm run build --workspaces",
     "dev": "npm run dev --workspaces",
     "lint": "npm run lint --workspaces",
-    "clean": "npm run clean --workspaces"
+    "clean": "npm run clean --workspaces",
+    "prettier": "prettier --write ."
   },
   "workspaces": [
     "packages/*"
@@ -26,15 +28,21 @@
     "@types/chai": "^5.2.2",
     "@types/node": "^24.0.7",
     "@types/react": "^19.1.8",
+    "@types/mocha": "^10.0.10",
+    "prettier": "^3.6.2",
     "chai": "^5.2.0",
     "esbuild": "^0.25.5",
+    "eslint": "^9.30.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-no-only-tests": "^3.3.0",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
     "mocha": "^11.7.1",
     "mocha-web": "^2.3.0",
     "promise-assist": "^2.0.1",
     "react": "^19.1.0",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.35.0"
   },
-  "dependencies": {
-    "@types/mocha": "^10.0.10"
-  }
+  "dependencies": {}
 }

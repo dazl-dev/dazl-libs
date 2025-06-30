@@ -51,8 +51,7 @@ Use the provided React hook for easy integration:
 import { useColorScheme } from '@dazl/color-scheme/react';
 
 function ThemeToggle() {
-  const { configScheme, resolvedScheme, setColorScheme, isLight, isDark } =
-    useColorScheme();
+  const { configScheme, resolvedScheme, setColorScheme, isLight, isDark } = useColorScheme();
 
   return (
     <div>

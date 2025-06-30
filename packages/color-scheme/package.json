@@ -28,7 +28,6 @@
   ],
   "author": "Dazl",
   "license": "MIT",
-  "devDependencies": {},
   "files": [
     "dist/**/*",
     "!**/*.test.*",
