@@ -1,6 +1,5 @@
 import { expect } from "chai";
 import type {
-  ColorSchemeApi,
   ColorSchemeConfig,
   ColorSchemeResolve,
   ColorSchemeSubscriber,
@@ -83,7 +82,6 @@ describe("Color Scheme Client", () => {
       {
         config: "dark",
         resolved: "dark",
-        resolvedSystem: "light",
       },
     ]);
     subCalls.length = 0;
@@ -104,7 +102,6 @@ describe("Color Scheme Client", () => {
       {
         config: "light",
         resolved: "light",
-        resolvedSystem: "dark",
       },
     ]);
     subCalls.length = 0;
@@ -124,7 +121,6 @@ describe("Color Scheme Client", () => {
       {
         config: "system",
         resolved: "dark",
-        resolvedSystem: "dark",
       },
     ]);
   });
@@ -166,6 +162,7 @@ async function setupTestWindow({
   systemColorScheme: "light" | "dark";
 }) {
   const iframe = document.createElement("iframe");
+  iframe.style.colorScheme = systemColorScheme;
   iframe.srcdoc = `
         <!DOCTYPE html>
         <html>
@@ -181,7 +178,6 @@ async function setupTestWindow({
           </body>
         </html>
       `;
-  iframe.style.colorScheme = systemColorScheme;
   document.body.appendChild(iframe);
   await new Promise((resolve) => {
     iframe.onload = resolve;
@@ -243,8 +239,10 @@ async function setupTestWindow({
       ).to.eql({
         config: expected.config,
         resolved: expected.resolved,
-        resolvedSystem: expected.resolvedSystem,
       });
+      expect(colorSchemeApi.resolvedSystem, `${labelPrefix}resolved system color scheme`).to.eql(
+        expected.resolvedSystem
+      );
 
       const htmlRoot = iframe.contentDocument?.documentElement;
       if (!htmlRoot) {

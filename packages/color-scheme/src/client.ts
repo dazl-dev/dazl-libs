@@ -4,7 +4,7 @@ import type {
   ColorSchemeSubscriber,
   ColorSchemeConfig,
   ColorSchemeResolve,
-} from "./types";
+} from './types';
 
 function initiateColorScheme({
   saveConfig,
@@ -19,32 +19,31 @@ function initiateColorScheme({
     config: loadConfig(),
   };
 
-  const isDarkQuery = window.matchMedia("(prefers-color-scheme: dark)");
+  const isDarkQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
   const resolveSystem = (): ColorSchemeResolve =>
-    isDarkQuery.matches ? "dark" : "light";
+    isDarkQuery.matches ? 'dark' : 'light';
   const onSystemChange = (): void => {
-    if (state.config !== "system") return;
+    if (state.config !== 'system') return;
     updateDocument();
   };
   const currentState = () => {
     const config = state.config;
-    const resolvedSystem = resolveSystem();
-    const resolved = config === "system" ? resolvedSystem : config;
-    return { config, resolved, resolvedSystem };
+    const resolved = config === 'system' ? resolveSystem() : config;
+    return { config, resolved };
   };
   const updateDocument = (): void => {
     const current = currentState();
     const root = document.documentElement;
     root.classList.remove(cssClass.light, cssClass.dark);
     root.classList.add(cssClass[current.resolved]);
-    root.style.colorScheme = current.resolved === "dark" ? "dark" : "light";
+    root.style.colorScheme = current.resolved === 'dark' ? 'dark' : 'light';
     state.listeners.forEach((listener) => listener(current));
   };
 
   // set initial color scheme and listen for system changes
   updateDocument();
-  isDarkQuery.addEventListener("change", onSystemChange);
+  isDarkQuery.addEventListener('change', onSystemChange);
 
   return {
     get config() {
@@ -59,6 +58,9 @@ function initiateColorScheme({
     get currentState() {
       return currentState();
     },
+    get resolvedSystem(): ColorSchemeResolve {
+      return resolveSystem();
+    },
     subscribe: (sub: ColorSchemeSubscriber): (() => void) => {
       state.listeners.add(sub);
       return (): void => {
@@ -67,30 +69,30 @@ function initiateColorScheme({
     },
     dispose: () => {
       state.listeners.clear();
-      isDarkQuery.removeEventListener("change", onSystemChange);
+      isDarkQuery.removeEventListener('change', onSystemChange);
     },
   };
 }
 
-const storageKey: string = "color-scheme";
+const storageKey: string = 'color-scheme';
 
 window.colorSchemeApi ??= initiateColorScheme({
   loadConfig(): ColorSchemeConfig {
     try {
       const config: string | null = localStorage.getItem(storageKey);
-      return config === "light" || config === "dark" ? config : "system";
+      return config === 'light' || config === 'dark' ? config : 'system';
     } catch {
-      return "system";
+      return 'system';
     }
   },
   saveConfig(config: ColorSchemeConfig): void {
     try {
-      if (config === "system") {
+      if (config === 'system') {
         localStorage.removeItem(storageKey);
       } else {
         localStorage.setItem(storageKey, config);
       }
     } catch {}
   },
-  cssClass: { light: "light-theme", dark: "dark-theme" },
+  cssClass: { light: 'light-theme', dark: 'dark-theme' },
 });

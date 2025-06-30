@@ -28,17 +28,17 @@ Import the client module to initialize color scheme management:
 > **Note:** This import should only be used in client-side code and must run before the `<body>` is rendered. For best results, include it in an inline script.
 
 ```typescript
-import "@dazl/color-scheme/client";
+import '@dazl/color-scheme/client';
 
 // The color scheme API is now available globally
 const currentScheme = window.colorSchemeApi.current;
 console.log(currentScheme); // { config: 'system', resolved: 'dark' }
 
 // Change the color scheme
-window.colorSchemeApi.config = "dark";
+window.colorSchemeApi.config = 'light';
 
 // Subscribe to changes
-const unsubscribe = window.colorSchemeApi.subscribe((config, resolved) => {
+const unsubscribe = window.colorSchemeApi.subscribe(({ config, resolved }) => {
   console.log(`Color scheme changed: ${config} (resolved: ${resolved})`);
 });
 ```
@@ -48,7 +48,7 @@ const unsubscribe = window.colorSchemeApi.subscribe((config, resolved) => {
 Use the provided React hook for easy integration:
 
 ```tsx
-import { useColorScheme } from "@dazl/color-scheme/react";
+import { useColorScheme } from '@dazl/color-scheme/react';
 
 function ThemeToggle() {
   const { configScheme, resolvedScheme, setColorScheme, isLight, isDark } =
@@ -61,9 +61,9 @@ function ThemeToggle() {
       <p>Is light theme: {isLight}</p>
       <p>Is dark theme: {isDark}</p>
 
-      <button onClick={() => setColorScheme("light")}>Light Theme</button>
-      <button onClick={() => setColorScheme("dark")}>Dark Theme</button>
-      <button onClick={() => setColorScheme("system")}>System Theme</button>
+      <button onClick={() => setColorScheme('light')}>Light Theme</button>
+      <button onClick={() => setColorScheme('dark')}>Dark Theme</button>
+      <button onClick={() => setColorScheme('system')}>System Theme</button>
     </div>
   );
 }

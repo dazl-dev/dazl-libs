@@ -1,5 +1,5 @@
-export type ColorSchemeConfig = "light" | "dark" | "system";
-export type ColorSchemeResolve = "light" | "dark";
+export type ColorSchemeConfig = 'light' | 'dark' | 'system';
+export type ColorSchemeResolve = 'light' | 'dark';
 
 export interface ColorSchemeSetup {
   saveConfig(config: ColorSchemeConfig): void;
@@ -10,7 +10,6 @@ export interface ColorSchemeSetup {
 export interface CurrentState {
   config: ColorSchemeConfig;
   resolved: ColorSchemeResolve;
-  resolvedSystem: ColorSchemeResolve;
 }
 
 export type ColorSchemeSubscriber = (state: CurrentState) => void;
@@ -19,6 +18,7 @@ export interface ColorSchemeApi {
   get config(): ColorSchemeConfig;
   set config(value: ColorSchemeConfig);
   get currentState(): CurrentState;
+  get resolvedSystem(): ColorSchemeResolve;
   subscribe(sub: ColorSchemeSubscriber): () => void;
   dispose(): void;
 }

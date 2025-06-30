@@ -1,14 +1,13 @@
-import { useState, useEffect } from "react";
-import type { ColorSchemeConfig, CurrentState } from "./types";
+import { useState, useEffect } from 'react';
+import type { ColorSchemeConfig, CurrentState } from './types';
 
-const api = typeof window !== "undefined" ? window.colorSchemeApi : null;
+const api = typeof window !== 'undefined' ? window.colorSchemeApi : null;
 
 // react hook for color scheme management
 export function useColorScheme() {
   const [{ config, resolved }, setScheme] = useState<CurrentState>({
-    config: "system",
-    resolved: "light",
-    resolvedSystem: "light",
+    config: 'system',
+    resolved: 'light',
   });
 
   useEffect(() => {
@@ -23,7 +22,7 @@ export function useColorScheme() {
       if (!api) return;
       api.config = config;
     },
-    isLight: resolved === "light",
-    isDark: resolved === "dark",
+    isLight: resolved === 'light',
+    isDark: resolved === 'dark',
   };
 }
