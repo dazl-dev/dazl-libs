@@ -5,24 +5,24 @@ const api = typeof window !== 'undefined' ? window.colorSchemeApi : null;
 
 // react hook for color scheme management
 export function useColorScheme() {
-  const [{ config, resolved }, setScheme] = useState<CurrentState>({
-    config: 'system',
-    resolved: 'light',
-  });
+    const [{ config, resolved }, setScheme] = useState<CurrentState>({
+        config: 'system',
+        resolved: 'light',
+    });
 
-  useEffect(() => {
-    setScheme(api!.currentState);
-    return api!.subscribe((currentState) => setScheme(currentState));
-  }, []);
+    useEffect(() => {
+        setScheme(api!.currentState);
+        return api!.subscribe((currentState) => setScheme(currentState));
+    }, []);
 
-  return {
-    configScheme: config,
-    resolvedScheme: resolved,
-    setColorScheme: (config: ColorSchemeConfig) => {
-      if (!api) return;
-      api.config = config;
-    },
-    isLight: resolved === 'light',
-    isDark: resolved === 'dark',
-  };
+    return {
+        configScheme: config,
+        resolvedScheme: resolved,
+        setColorScheme: (config: ColorSchemeConfig) => {
+            if (!api) return;
+            api.config = config;
+        },
+        isLight: resolved === 'light',
+        isDark: resolved === 'dark',
+    };
 }
