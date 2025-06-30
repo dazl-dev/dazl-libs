@@ -30,9 +30,15 @@
   "license": "MIT",
   "devDependencies": {},
   "files": [
-    "dist/**/*",
-    "!**/*.test.*",
-    "!**/playwright.config.*",
-    "!**/*.playwright.*"
-  ]
+    "dist/**/*"
+  ],
+  "homepage": "https://github.com/wixplosives/dazl-libs/tree/main/packages/color-scheme#readme",
+  "bugs": {
+    "url": "https://github.com/wixplosives/dazl-libs/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wixplosives/dazl-libs.git",
+    "directory": "packages/color-scheme"
+  }
 }
