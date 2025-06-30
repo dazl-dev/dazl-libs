@@ -30,6 +30,9 @@
   "license": "MIT",
   "devDependencies": {},
   "files": [
-    "dist/**/*"
+    "dist/**/*",
+    "!**/*.test.*",
+    "!**/playwright.config.*",
+    "!**/*.playwright.*"
   ]
 }
