@@ -30,7 +30,10 @@
   "license": "MIT",
   "devDependencies": {},
   "files": [
-    "dist/**/*"
+    "dist/**/*",
+    "!dist/**/*.test.*",
+    "!dist/**/*.spec.*",
+    "!dist/**/*.playwright.*"
   ],
   "homepage": "https://github.com/wixplosives/dazl-libs/tree/main/packages/color-scheme#readme",
   "bugs": {
