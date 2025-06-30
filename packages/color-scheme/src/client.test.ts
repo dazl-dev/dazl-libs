@@ -1,161 +1,171 @@
-import { expect } from 'chai';
-import type { ColorSchemeApi, ColorSchemeConfig, ColorSchemeResolve, ColorSchemeSubscriber, CurrentState } from './types';
-import { waitFor } from 'promise-assist';
+import { expect } from "chai";
+import type {
+  ColorSchemeApi,
+  ColorSchemeConfig,
+  ColorSchemeResolve,
+  ColorSchemeSubscriber,
+  CurrentState,
+} from "./types";
+import { waitFor } from "promise-assist";
 
-describe('Color Scheme Client', () => {
-  it('should apply default system light theme', async () => {
-    using t = await setupTestWindow({systemColorScheme: 'light'});
+describe("Color Scheme Client", () => {
+  it("should apply default system light theme", async () => {
+    using t = await setupTestWindow({ systemColorScheme: "light" });
 
     t.expected({
-      config: 'system',
-      resolved: 'light',
-      resolvedSystem: 'light',
-      rootCssClass: 'light-theme',
-      rootColorScheme: 'light',
+      config: "system",
+      resolved: "light",
+      resolvedSystem: "light",
+      rootCssClass: "light-theme",
+      rootColorScheme: "light",
     });
   });
-  it('should apply default system dark theme', async () => {
-    using t = await setupTestWindow({systemColorScheme: 'dark'});
+  it("should apply default system dark theme", async () => {
+    using t = await setupTestWindow({ systemColorScheme: "dark" });
 
     t.expected({
-      config: 'system',
-      resolved: 'dark',
-      resolvedSystem: 'dark',
-      rootCssClass: 'dark-theme',
-      rootColorScheme: 'dark',
+      config: "system",
+      resolved: "dark",
+      resolvedSystem: "dark",
+      rootCssClass: "dark-theme",
+      rootColorScheme: "dark",
     });
   });
-  it('should detect system color change', async () => {
-    using t = await setupTestWindow({systemColorScheme: 'light'});
+  it("should detect system color change", async () => {
+    using t = await setupTestWindow({ systemColorScheme: "light" });
 
     t.expected({
-      label: 'initial light',
-      config: 'system',
-      resolved: 'light',
-      resolvedSystem: 'light',
-      rootCssClass: 'light-theme',
-      rootColorScheme: 'light',
+      label: "initial light",
+      config: "system",
+      resolved: "light",
+      resolvedSystem: "light",
+      rootCssClass: "light-theme",
+      rootColorScheme: "light",
     });
 
     await t.waitForUpdate({
-      action: () => t.setSystemColorScheme('dark'),
+      action: () => t.setSystemColorScheme("dark"),
     });
 
     t.expected({
-      label: 'after system change to dark',
-      config: 'system',
-      resolved: 'dark',
-      resolvedSystem: 'dark',
-      rootCssClass: 'dark-theme',
-      rootColorScheme: 'dark',
+      label: "after system change to dark",
+      config: "system",
+      resolved: "dark",
+      resolvedSystem: "dark",
+      rootCssClass: "dark-theme",
+      rootColorScheme: "dark",
     });
 
     await t.waitForUpdate({
-      action: () => t.setSystemColorScheme('light'),
+      action: () => t.setSystemColorScheme("light"),
     });
 
     t.expected({
-      label: 'after system change back to light',
-      config: 'system',
-      resolved: 'light',
-      resolvedSystem: 'light',
-      rootCssClass: 'light-theme',
-      rootColorScheme: 'light',
+      label: "after system change back to light",
+      config: "system",
+      resolved: "light",
+      resolvedSystem: "light",
+      rootCssClass: "light-theme",
+      rootColorScheme: "light",
     });
   });
-  it('should override the system color scheme', async () => {
-    using t = await setupTestWindow({systemColorScheme: 'light'});
+  it("should override the system color scheme", async () => {
+    using t = await setupTestWindow({ systemColorScheme: "light" });
 
     const subCalls: CurrentState[] = [];
-    t.api.subscribe(state => subCalls.push(state));
+    t.api.subscribe((state) => subCalls.push(state));
 
     t.waitForUpdate({
-      action: () => t.api.config = 'dark',
+      action: () => (t.api.config = "dark"),
     });
 
-    expect(subCalls, 'after dark override').to.have.eql([
+    expect(subCalls, "after dark override").to.have.eql([
       {
-        config: 'dark',
-        resolved: 'dark',
-        resolvedSystem: 'light',
-      },
-    ]);
-    subCalls.length = 0;
-    
-    t.setSystemColorScheme('dark');
-    t.setSystemColorScheme('light');
-    t.setSystemColorScheme('dark');
-
-    expect(subCalls, 'system has no affect after dark override').to.have.eql([]);
-
-    t.waitForUpdate({
-      action: () => t.api.config = 'light',
-    });
-
-    expect(subCalls, 'after light override').to.have.eql([
-      {
-        config: 'light',
-        resolved: 'light',
-        resolvedSystem: 'dark',
+        config: "dark",
+        resolved: "dark",
+        resolvedSystem: "light",
       },
     ]);
     subCalls.length = 0;
 
-    t.setSystemColorScheme('light');
-    t.setSystemColorScheme('dark');
+    t.setSystemColorScheme("dark");
+    t.setSystemColorScheme("light");
+    t.setSystemColorScheme("dark");
 
-    expect(subCalls, 'system has no affect after light override').to.have.eql([]);
+    expect(subCalls, "system has no affect after dark override").to.have.eql(
+      [],
+    );
 
     t.waitForUpdate({
-      action: () => t.api.config = 'system',
+      action: () => (t.api.config = "light"),
     });
 
-    expect(subCalls, 'after default back to system').to.have.eql([
+    expect(subCalls, "after light override").to.have.eql([
       {
-        config: 'system',
-        resolved: 'dark',
-        resolvedSystem: 'dark',
+        config: "light",
+        resolved: "light",
+        resolvedSystem: "dark",
+      },
+    ]);
+    subCalls.length = 0;
+
+    t.setSystemColorScheme("light");
+    t.setSystemColorScheme("dark");
+
+    expect(subCalls, "system has no affect after light override").to.have.eql(
+      [],
+    );
+
+    t.waitForUpdate({
+      action: () => (t.api.config = "system"),
+    });
+
+    expect(subCalls, "after default back to system").to.have.eql([
+      {
+        config: "system",
+        resolved: "dark",
+        resolvedSystem: "dark",
       },
     ]);
   });
-  it('should persist color scheme config', async () => {
-    using t = await setupTestWindow({systemColorScheme: 'light'});
+  it("should persist color scheme config", async () => {
+    using t = await setupTestWindow({ systemColorScheme: "light" });
 
     await t.waitForUpdate({
-      action: () => t.api.config = 'dark',
+      action: () => (t.api.config = "dark"),
     });
 
     t.expected({
-      label: 'after dark override',
-      config: 'dark',
-      resolved: 'dark',
-      resolvedSystem: 'light',
-      rootCssClass: 'dark-theme',
-      rootColorScheme: 'dark',
+      label: "after dark override",
+      config: "dark",
+      resolved: "dark",
+      resolvedSystem: "light",
+      rootCssClass: "dark-theme",
+      rootColorScheme: "dark",
     });
 
     const newApi = await t.refreshWindow();
-    
-    expect(newApi, 'new colorSchemeApi after refresh').to.not.equal(t.api);
+
+    expect(newApi, "new colorSchemeApi after refresh").to.not.equal(t.api);
     t.expected({
-      label: 'after refresh with dark override',
-      config: 'dark',
-      resolved: 'dark',
-      resolvedSystem: 'light',
-      rootCssClass: 'dark-theme',
-      rootColorScheme: 'dark',
+      label: "after refresh with dark override",
+      config: "dark",
+      resolved: "dark",
+      resolvedSystem: "light",
+      rootCssClass: "dark-theme",
+      rootColorScheme: "dark",
     });
   });
 });
 
 async function setupTestWindow({
-  config = 'system',
+  config = "system",
   systemColorScheme,
 }: {
   config?: ColorSchemeConfig;
-  systemColorScheme: 'light' | 'dark';
+  systemColorScheme: "light" | "dark";
 }) {
-  const iframe = document.createElement('iframe');
+  const iframe = document.createElement("iframe");
   iframe.srcdoc = `
         <!DOCTYPE html>
         <html>
@@ -178,10 +188,10 @@ async function setupTestWindow({
   });
   const colorSchemeApi = iframe.contentWindow?.colorSchemeApi;
   if (!colorSchemeApi) {
-    throw new Error('Color Scheme API not found in iframe');
+    throw new Error("Color Scheme API not found in iframe");
   }
   const initialConfig = colorSchemeApi.config;
-  if(initialConfig !== config) {
+  if (initialConfig !== config) {
     colorSchemeApi.config = config;
   }
   return {
@@ -189,21 +199,23 @@ async function setupTestWindow({
     setSystemColorScheme(config: ColorSchemeResolve) {
       iframe.style.colorScheme = config;
     },
-    async waitForUpdate({action}: {action?: () => void}) {
-      let update: null | Parameters<ColorSchemeSubscriber>[0] = null
+    async waitForUpdate({ action }: { action?: () => void }) {
+      let update: null | Parameters<ColorSchemeSubscriber>[0] = null;
       const unsubscribe = colorSchemeApi.subscribe((current) => {
         update = current;
       });
       action?.();
       return await waitFor(() => {
         if (!update) {
-          throw new Error('No update received');
+          throw new Error("No update received");
         }
-      }).catch((e) => {
-        throw new Error(`Timeout waiting for update: ${e.message}`);
-      }).finally(() => {
-        unsubscribe();
-      });
+      })
+        .catch((e) => {
+          throw new Error(`Timeout waiting for update: ${e.message}`);
+        })
+        .finally(() => {
+          unsubscribe();
+        });
     },
     async refreshWindow() {
       iframe.contentWindow?.location.reload();
@@ -212,10 +224,23 @@ async function setupTestWindow({
       });
       return iframe.contentWindow?.colorSchemeApi;
     },
-    expected({label, ...expected}: {config: ColorSchemeConfig, resolved: ColorSchemeResolve, resolvedSystem: ColorSchemeResolve, rootCssClass: string, rootColorScheme: ColorSchemeResolve, label?: string}) {
-      const labelPrefix = label ? `(${label}) ` : '';
+    expected({
+      label,
+      ...expected
+    }: {
+      config: ColorSchemeConfig;
+      resolved: ColorSchemeResolve;
+      resolvedSystem: ColorSchemeResolve;
+      rootCssClass: string;
+      rootColorScheme: ColorSchemeResolve;
+      label?: string;
+    }) {
+      const labelPrefix = label ? `(${label}) ` : "";
 
-      expect(colorSchemeApi.currentState, `${labelPrefix}API current state`).to.eql({
+      expect(
+        colorSchemeApi.currentState,
+        `${labelPrefix}API current state`,
+      ).to.eql({
         config: expected.config,
         resolved: expected.resolved,
         resolvedSystem: expected.resolvedSystem,
@@ -225,8 +250,14 @@ async function setupTestWindow({
       if (!htmlRoot) {
         throw new Error(`${labelPrefix}HTML root not found in iframe document`);
       }
-      expect(htmlRoot.classList.value, `${labelPrefix}HTML root css class`).to.eql(expected.rootCssClass);
-      expect(htmlRoot.style.colorScheme, `${labelPrefix}HTML root color scheme`).to.eql(expected.rootColorScheme);
+      expect(
+        htmlRoot.classList.value,
+        `${labelPrefix}HTML root css class`,
+      ).to.eql(expected.rootCssClass);
+      expect(
+        htmlRoot.style.colorScheme,
+        `${labelPrefix}HTML root color scheme`,
+      ).to.eql(expected.rootColorScheme);
     },
     [Symbol.dispose]: () => {
       colorSchemeApi.config = initialConfig;

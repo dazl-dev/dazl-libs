@@ -22,7 +22,7 @@ function initiateColorScheme({
   const isDarkQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
   const resolveSystem = (): ColorSchemeResolve =>
-    isDarkQuery.matches ? 'dark' : 'light';
+    isDarkQuery.matches ? "dark" : "light";
   const onSystemChange = (): void => {
     if (state.config !== "system") return;
     updateDocument();
@@ -30,7 +30,7 @@ function initiateColorScheme({
   const currentState = () => {
     const config = state.config;
     const resolvedSystem = resolveSystem();
-    const resolved = config === 'system' ? resolvedSystem : config;
+    const resolved = config === "system" ? resolvedSystem : config;
     return { config, resolved, resolvedSystem };
   };
   const updateDocument = (): void => {
@@ -38,7 +38,7 @@ function initiateColorScheme({
     const root = document.documentElement;
     root.classList.remove(cssClass.light, cssClass.dark);
     root.classList.add(cssClass[current.resolved]);
-    root.style.colorScheme = current.resolved === 'dark' ? 'dark' : 'light';
+    root.style.colorScheme = current.resolved === "dark" ? "dark" : "light";
     state.listeners.forEach((listener) => listener(current));
   };
 
@@ -67,7 +67,7 @@ function initiateColorScheme({
     },
     dispose: () => {
       state.listeners.clear();
-      isDarkQuery.removeEventListener('change', onSystemChange);
+      isDarkQuery.removeEventListener("change", onSystemChange);
     },
   };
 }
