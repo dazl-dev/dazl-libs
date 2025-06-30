@@ -1,20 +1,19 @@
-import { useState, useEffect } from "react";
-import type { ColorSchemeConfig, ColorSchemeResolve } from "./types";
+import { useState, useEffect } from 'react';
+import type { ColorSchemeConfig, CurrentState } from './types';
 
 const api = typeof window !== "undefined" ? window.colorSchemeApi : null;
 
 // react hook for color scheme management
 export function useColorScheme() {
-  const [{ config, resolved }, setScheme] = useState<{
-    config: ColorSchemeConfig;
-    resolved: ColorSchemeResolve;
-  }>({ config: "system", resolved: "light" });
+  const [{ config, resolved }, setScheme] = useState<CurrentState>({
+    config: 'system',
+    resolved: 'light',
+    resolvedSystem: 'light',
+  });
 
   useEffect(() => {
-    setScheme(api!.current);
-    return api!.subscribe((config, resolved) =>
-      setScheme({ config, resolved })
-    );
+    setScheme(api!.currentState);
+    return api!.subscribe((currentState) => setScheme(currentState));
   }, []);
 
   return {

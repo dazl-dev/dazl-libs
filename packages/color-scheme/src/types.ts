@@ -7,15 +7,18 @@ export interface ColorSchemeSetup {
   cssClass: { light: string; dark: string };
 }
 
-export type ColorSchemeSubscriber = (
-  config: ColorSchemeConfig,
-  resolved: ColorSchemeResolve
-) => void;
+export interface CurrentState {
+  config: ColorSchemeConfig;
+  resolved: ColorSchemeResolve;
+  resolvedSystem: ColorSchemeResolve;
+}
+
+export type ColorSchemeSubscriber = (state: CurrentState) => void;
 
 export interface ColorSchemeApi {
   get config(): ColorSchemeConfig;
   set config(value: ColorSchemeConfig);
-  get current(): { config: ColorSchemeConfig; resolved: ColorSchemeResolve };
+  get currentState(): CurrentState;
   subscribe(sub: ColorSchemeSubscriber): () => void;
 }
 

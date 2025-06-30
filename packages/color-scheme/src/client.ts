@@ -21,21 +21,25 @@ function initiateColorScheme({
 
   const isDarkQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
-  const resolve = (): ColorSchemeResolve => {
-    if (state.config !== "system") return state.config;
-    return isDarkQuery.matches ? "dark" : "light";
-  };
+  const resolveSystem = (): ColorSchemeResolve =>
+    isDarkQuery.matches ? 'dark' : 'light';
   const onSystemChange = (): void => {
     if (state.config !== "system") return;
     updateDocument();
   };
+  const currentState = () => {
+    const config = state.config;
+    const resolvedSystem = resolveSystem();
+    const resolved = config === 'system' ? resolvedSystem : config;
+    return { config, resolved, resolvedSystem };
+  };
   const updateDocument = (): void => {
-    const resolved = resolve();
+    const current = currentState();
     const root = document.documentElement;
     root.classList.remove(cssClass.light, cssClass.dark);
-    root.classList.add(cssClass[resolved]);
-    root.style.colorScheme = resolved === "dark" ? "dark" : "light";
-    state.listeners.forEach((listener) => listener(state.config, resolved));
+    root.classList.add(cssClass[current.resolved]);
+    root.style.colorScheme = current.resolved === 'dark' ? 'dark' : 'light';
+    state.listeners.forEach((listener) => listener(current));
   };
 
   // set initial color scheme and listen for system changes
@@ -52,8 +56,8 @@ function initiateColorScheme({
       updateDocument();
       saveConfig(config);
     },
-    get current() {
-      return { config: state.config, resolved: resolve() };
+    get currentState() {
+      return currentState();
     },
     subscribe: (sub: ColorSchemeSubscriber): (() => void) => {
       state.listeners.add(sub);
