@@ -20,6 +20,7 @@ export interface ColorSchemeApi {
   set config(value: ColorSchemeConfig);
   get currentState(): CurrentState;
   subscribe(sub: ColorSchemeSubscriber): () => void;
+  dispose(): void;
 }
 
 declare global {

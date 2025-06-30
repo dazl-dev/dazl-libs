@@ -65,6 +65,10 @@ function initiateColorScheme({
         state.listeners.delete(sub);
       };
     },
+    dispose: () => {
+      state.listeners.clear();
+      isDarkQuery.removeEventListener('change', onSystemChange);
+    },
   };
 }
 
