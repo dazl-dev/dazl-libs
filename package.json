@@ -5,10 +5,11 @@
   "type": "module",
   "description": "A collection of utility libraries",
   "scripts": {
+    "pretest": "npm run lint",
     "test": "npm run test --workspaces",
     "build": "npm run build --workspaces",
     "dev": "npm run dev --workspaces",
-    "lint": "npm run lint --workspaces",
+    "lint": "eslint",
     "clean": "npm run clean --workspaces",
     "prettier": "prettier --write ."
   },

@@ -11,7 +11,7 @@ for (const config of pluginTypescript.configs.recommendedTypeChecked) {
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
-    { ignores: ['**/dist/', '**/dist-engine/', 'packages/engineer/gui-feature.d.ts'] },
+    { ignores: ['**/dist/', 'packages/color-scheme/playwright.config.ts'] },
     pluginJs.configs.recommended,
     pluginReact.configs.flat.recommended,
     { settings: { react: { version: 'detect' } } },
