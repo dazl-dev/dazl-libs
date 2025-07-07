@@ -1,15 +1,71 @@
 import { test, expect, type Page } from '@playwright/test';
 import type { ColorSchemeConfig, ColorSchemeResolve, CurrentState } from './types';
 import { join } from 'node:path';
-
-const testPagePath = join(import.meta.dirname, './client.playwright.page.html');
+import { mkdtemp, copyFile, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
 
 async function setupTestPage(page: Page, systemColorScheme: ColorSchemeResolve) {
     // Set the color scheme preference before navigating
     await page.emulateMedia({ colorScheme: systemColorScheme });
 
+    // Create a temporary directory and copy setup test files there
+    const tempDir = await mkdtemp(join(tmpdir(), 'color-scheme-test-'));
+    const clientJsPath = join(import.meta.dirname, '../dist/client.js');
+    await copyFile(clientJsPath, join(tempDir, 'client.js'));
+    await writeFile(
+        join(tempDir, 'test.html'),
+        `
+  <!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Color Scheme Test</title>
+    <script
+      src="./client.js"
+    ></script>
+  </head>
+  <body>
+    <h1>Color Scheme Test Page</h1>
+    <div id="content">
+      <p>This page tests the color scheme functionality.</p>
+      <div id="config"></div>
+      <div id="resolved"></div>
+      <div id="resolved-system"></div>
+      <h3>subscription calls</h3>
+      <div id="subscription-calls"></div>
+    </div>
+    <script>
+      // Helper function to update display
+      function updateDisplay() {
+        const api = window.colorSchemeApi;
+        document.getElementById('config').textContent = \`Config: \${api.config}\`;
+        document.getElementById(
+          'resolved'
+        ).textContent = \`Resolved: \${api.currentState.resolved}\`;
+        document.getElementById(
+          'resolved-system'
+        ).textContent = \`System: \${api.resolvedSystem}\`;
+      }
+
+      // Initial display update
+      updateDisplay();
+
+      // Subscribe to changes
+      window.colorSchemeApi.subscribe((state) => {
+        document.getElementById(
+          'subscription-calls'
+        ).textContent += \`\n\${JSON.stringify(state)}\`;
+        updateDisplay();
+      });
+    </script>
+  </body>
+</html>
+  `,
+    );
+
     // Navigate to the test page
-    await page.goto(`file://${testPagePath}`);
+    await page.goto(`file://${join(tempDir, 'test.html')}`);
 
     // Wait for the page to load and API to be available
     await page.waitForFunction(() => window.colorSchemeApi);
