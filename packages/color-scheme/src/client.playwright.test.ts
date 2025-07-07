@@ -4,7 +4,13 @@ import { join } from 'node:path';
 import { mkdtemp, copyFile, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 
-async function setupTestPage(page: Page, { systemColorScheme }: { systemColorScheme: ColorSchemeResolve }) {
+async function setupTestPage(
+    page: Page,
+    {
+        systemColorScheme,
+        cssClass,
+    }: { systemColorScheme: ColorSchemeResolve; cssClass?: { light?: string; dark?: string } },
+) {
     // Set the color scheme preference before navigating
     await page.emulateMedia({ colorScheme: systemColorScheme });
 
@@ -23,6 +29,8 @@ async function setupTestPage(page: Page, { systemColorScheme }: { systemColorSch
     <title>Color Scheme Test</title>
     <script
       src="./client.js"
+      ${cssClass?.dark ? `data-dark-class="${cssClass.dark}"` : ''}
+      ${cssClass?.light ? `data-light-class="${cssClass.light}"` : ''}
     ></script>
   </head>
   <body>
@@ -291,6 +299,30 @@ test.describe('Color Scheme Client', () => {
             resolved: 'dark',
             resolvedSystem: 'light',
             rootCssClass: 'dark-theme',
+            rootColorScheme: 'dark',
+        });
+    });
+
+    test('should configure the root CSS class per mode', async ({ page }) => {
+        const t = await setupTestPage(page, { systemColorScheme: 'light', cssClass: { light: 'LLL', dark: 'DDD' } });
+
+        await t.expectState({
+            config: 'system',
+            resolved: 'light',
+            resolvedSystem: 'light',
+            rootCssClass: 'LLL',
+            rootColorScheme: 'light',
+        });
+
+        await t.waitForStateChange(async () => {
+            await t.setConfig('dark');
+        });
+
+        await t.expectState({
+            config: 'dark',
+            resolved: 'dark',
+            resolvedSystem: 'light',
+            rootCssClass: 'DDD',
             rootColorScheme: 'dark',
         });
     });
