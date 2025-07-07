@@ -4,7 +4,7 @@ import { join } from 'node:path';
 import { mkdtemp, copyFile, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 
-async function setupTestPage(page: Page, systemColorScheme: ColorSchemeResolve) {
+async function setupTestPage(page: Page, { systemColorScheme }: { systemColorScheme: ColorSchemeResolve }) {
     // Set the color scheme preference before navigating
     await page.emulateMedia({ colorScheme: systemColorScheme });
 
@@ -142,7 +142,7 @@ async function setupTestPage(page: Page, systemColorScheme: ColorSchemeResolve) 
 
 test.describe('Color Scheme Client', () => {
     test('should apply default system light theme', async ({ page }) => {
-        const t = await setupTestPage(page, 'light');
+        const t = await setupTestPage(page, { systemColorScheme: 'light' });
 
         await t.expectState({
             config: 'system',
@@ -154,7 +154,7 @@ test.describe('Color Scheme Client', () => {
     });
 
     test('should apply default system dark theme', async ({ page }) => {
-        const t = await setupTestPage(page, 'dark');
+        const t = await setupTestPage(page, { systemColorScheme: 'dark' });
 
         await t.expectState({
             config: 'system',
@@ -166,7 +166,7 @@ test.describe('Color Scheme Client', () => {
     });
 
     test('should detect system color change', async ({ page }) => {
-        const t = await setupTestPage(page, 'light');
+        const t = await setupTestPage(page, { systemColorScheme: 'light' });
 
         await t.expectState({
             label: 'initial light',
@@ -205,7 +205,7 @@ test.describe('Color Scheme Client', () => {
     });
 
     test('should override the system color scheme', async ({ page }) => {
-        const t = await setupTestPage(page, 'light');
+        const t = await setupTestPage(page, { systemColorScheme: 'light' });
 
         await t.waitForStateChange(async () => {
             await t.setConfig('dark');
@@ -266,7 +266,7 @@ test.describe('Color Scheme Client', () => {
     });
 
     test('should persist color scheme config', async ({ page }) => {
-        const t = await setupTestPage(page, 'light');
+        const t = await setupTestPage(page, { systemColorScheme: 'light' });
 
         await t.waitForStateChange(async () => {
             await t.setConfig('dark');
