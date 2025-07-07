@@ -56,6 +56,9 @@ function initiateColorScheme({ saveConfig, loadConfig, cssClass }: ColorSchemeSe
         get resolvedSystem(): ColorSchemeResolve {
             return resolveSystem();
         },
+        getRootCssClass(resolved = currentState().resolved) {
+            return cssClass[resolved];
+        },
         subscribe: (sub: ColorSchemeSubscriber): (() => void) => {
             state.listeners.add(sub);
             return (): void => {
@@ -70,6 +73,9 @@ function initiateColorScheme({ saveConfig, loadConfig, cssClass }: ColorSchemeSe
 }
 
 const storageKey: string = 'color-scheme';
+const scriptDataset = document.currentScript?.dataset;
+const darkCssClass = scriptDataset?.darkClass || 'dark-theme';
+const lightCssClass = scriptDataset?.lightClass || 'light-theme';
 
 window.colorSchemeApi ??= initiateColorScheme({
     loadConfig(): ColorSchemeConfig {
@@ -91,5 +97,5 @@ window.colorSchemeApi ??= initiateColorScheme({
             // Fallback to no-op if localStorage is not available
         }
     },
-    cssClass: { light: 'light-theme', dark: 'dark-theme' },
+    cssClass: { light: lightCssClass, dark: darkCssClass },
 });

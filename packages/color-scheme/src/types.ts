@@ -19,6 +19,7 @@ export interface ColorSchemeApi {
     set config(value: ColorSchemeConfig);
     get currentState(): CurrentState;
     get resolvedSystem(): ColorSchemeResolve;
+    getRootCssClass(resolved?: ColorSchemeResolve): string;
     subscribe(sub: ColorSchemeSubscriber): () => void;
     dispose(): void;
 }

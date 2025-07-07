@@ -1,15 +1,79 @@
 import { test, expect, type Page } from '@playwright/test';
 import type { ColorSchemeConfig, ColorSchemeResolve, CurrentState } from './types';
 import { join } from 'node:path';
+import { mkdtemp, copyFile, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
 
-const testPagePath = join(import.meta.dirname, './client.playwright.page.html');
-
-async function setupTestPage(page: Page, systemColorScheme: ColorSchemeResolve) {
+async function setupTestPage(
+    page: Page,
+    {
+        systemColorScheme,
+        cssClass,
+    }: { systemColorScheme: ColorSchemeResolve; cssClass?: { light?: string; dark?: string } },
+) {
     // Set the color scheme preference before navigating
     await page.emulateMedia({ colorScheme: systemColorScheme });
 
+    // Create a temporary directory and copy setup test files there
+    const tempDir = await mkdtemp(join(tmpdir(), 'color-scheme-test-'));
+    const clientJsPath = join(import.meta.dirname, '../dist/client.js');
+    await copyFile(clientJsPath, join(tempDir, 'client.js'));
+    await writeFile(
+        join(tempDir, 'test.html'),
+        `
+  <!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Color Scheme Test</title>
+    <script
+      src="./client.js"
+      ${cssClass?.dark ? `data-dark-class="${cssClass.dark}"` : ''}
+      ${cssClass?.light ? `data-light-class="${cssClass.light}"` : ''}
+    ></script>
+  </head>
+  <body>
+    <h1>Color Scheme Test Page</h1>
+    <div id="content">
+      <p>This page tests the color scheme functionality.</p>
+      <div id="config"></div>
+      <div id="resolved"></div>
+      <div id="resolved-system"></div>
+      <h3>subscription calls</h3>
+      <div id="subscription-calls"></div>
+    </div>
+    <script>
+      // Helper function to update display
+      function updateDisplay() {
+        const api = window.colorSchemeApi;
+        document.getElementById('config').textContent = \`Config: \${api.config}\`;
+        document.getElementById(
+          'resolved'
+        ).textContent = \`Resolved: \${api.currentState.resolved}\`;
+        document.getElementById(
+          'resolved-system'
+        ).textContent = \`System: \${api.resolvedSystem}\`;
+      }
+
+      // Initial display update
+      updateDisplay();
+
+      // Subscribe to changes
+      window.colorSchemeApi.subscribe((state) => {
+        document.getElementById(
+          'subscription-calls'
+        ).textContent += \`\n\${JSON.stringify(state)}\`;
+        updateDisplay();
+      });
+    </script>
+  </body>
+</html>
+  `,
+    );
+
     // Navigate to the test page
-    await page.goto(`file://${testPagePath}`);
+    await page.goto(`file://${join(tempDir, 'test.html')}`);
 
     // Wait for the page to load and API to be available
     await page.waitForFunction(() => window.colorSchemeApi);
@@ -86,7 +150,7 @@ async function setupTestPage(page: Page, systemColorScheme: ColorSchemeResolve) 
 
 test.describe('Color Scheme Client', () => {
     test('should apply default system light theme', async ({ page }) => {
-        const t = await setupTestPage(page, 'light');
+        const t = await setupTestPage(page, { systemColorScheme: 'light' });
 
         await t.expectState({
             config: 'system',
@@ -98,7 +162,7 @@ test.describe('Color Scheme Client', () => {
     });
 
     test('should apply default system dark theme', async ({ page }) => {
-        const t = await setupTestPage(page, 'dark');
+        const t = await setupTestPage(page, { systemColorScheme: 'dark' });
 
         await t.expectState({
             config: 'system',
@@ -110,7 +174,7 @@ test.describe('Color Scheme Client', () => {
     });
 
     test('should detect system color change', async ({ page }) => {
-        const t = await setupTestPage(page, 'light');
+        const t = await setupTestPage(page, { systemColorScheme: 'light' });
 
         await t.expectState({
             label: 'initial light',
@@ -149,7 +213,7 @@ test.describe('Color Scheme Client', () => {
     });
 
     test('should override the system color scheme', async ({ page }) => {
-        const t = await setupTestPage(page, 'light');
+        const t = await setupTestPage(page, { systemColorScheme: 'light' });
 
         await t.waitForStateChange(async () => {
             await t.setConfig('dark');
@@ -210,7 +274,7 @@ test.describe('Color Scheme Client', () => {
     });
 
     test('should persist color scheme config', async ({ page }) => {
-        const t = await setupTestPage(page, 'light');
+        const t = await setupTestPage(page, { systemColorScheme: 'light' });
 
         await t.waitForStateChange(async () => {
             await t.setConfig('dark');
@@ -235,6 +299,30 @@ test.describe('Color Scheme Client', () => {
             resolved: 'dark',
             resolvedSystem: 'light',
             rootCssClass: 'dark-theme',
+            rootColorScheme: 'dark',
+        });
+    });
+
+    test('should configure the root CSS class per mode', async ({ page }) => {
+        const t = await setupTestPage(page, { systemColorScheme: 'light', cssClass: { light: 'LLL', dark: 'DDD' } });
+
+        await t.expectState({
+            config: 'system',
+            resolved: 'light',
+            resolvedSystem: 'light',
+            rootCssClass: 'LLL',
+            rootColorScheme: 'light',
+        });
+
+        await t.waitForStateChange(async () => {
+            await t.setConfig('dark');
+        });
+
+        await t.expectState({
+            config: 'dark',
+            resolved: 'dark',
+            resolvedSystem: 'light',
+            rootCssClass: 'DDD',
             rootColorScheme: 'dark',
         });
     });

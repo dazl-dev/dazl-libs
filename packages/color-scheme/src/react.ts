@@ -24,5 +24,6 @@ export function useColorScheme() {
         },
         isLight: resolved === 'light',
         isDark: resolved === 'dark',
+        rootCssClass: api?.getRootCssClass(resolved) || '',
     };
 }
