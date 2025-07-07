@@ -56,6 +56,9 @@ function initiateColorScheme({ saveConfig, loadConfig, cssClass }: ColorSchemeSe
         get resolvedSystem(): ColorSchemeResolve {
             return resolveSystem();
         },
+        getRootCssClass(resolved = currentState().resolved) {
+            return cssClass[resolved];
+        },
         subscribe: (sub: ColorSchemeSubscriber): (() => void) => {
             state.listeners.add(sub);
             return (): void => {
