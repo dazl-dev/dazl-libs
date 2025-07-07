@@ -43,6 +43,22 @@ const unsubscribe = window.colorSchemeApi.subscribe(({ config, resolved }) => {
 });
 ```
 
+#### Color-scheme API
+
+- **`config`** (`light|dark|system`) - Get or set the current color scheme configuration
+- **`currentState`** (`{ config: light|dark|system, resolved: light|dark }`) - Get the current state including both config and resolved values
+- **`resolvedSystem`** (`light|dark`) - Get the resolved theme based on system preferences
+- **`subscribe`** (`(handler: (currentState) => void) => () => void`) - Subscribe to color scheme changes and return an unsubscribe function
+- **`getRootCssClass`** (`(resolved?: light|dark) => string`) - CSS class applied to the document root based on the resolved theme or passed value
+
+#### Override root CSS class
+
+Override the default CSS classes applied to the document root by specifying `data-dark-class` and `data-light-class` attributes in the client script tag:
+
+```html
+<script src="@dazl/color-scheme/client" data-dark-class="dark-theme" data-light-class="light-theme"></script>
+```
+
 ### React Integration
 
 Use the provided React hook for easy integration:
@@ -68,6 +84,15 @@ function ThemeToggle() {
 }
 ```
 
+#### Hook API
+
+- **`resolvedScheme`** (`light|dark`) - Resolved theme (light/dark)
+- **`configScheme`** (`light|dark|system`) - Current configuration (light/dark/system)
+- **`setColorScheme`** (`(config: light|dark|system) => void`) - Function to change the color scheme
+- **`isLight`** (`boolean`) - Whether the current resolved theme is light
+- **`isDark`** (`boolean`) - Whether the current resolved theme is dark
+- **`rootCssClass`** (`string`) - CSS class applied to the document root based on the resolved theme
+
 ### CSS Styling
 
 The library automatically applies CSS classes to the document root. Style your application accordingly:
@@ -85,35 +110,6 @@ The library automatically applies CSS classes to the document root. Style your a
   --text-color: #000000;
 }
 ```
-
-## API Reference
-
-### ColorSchemeApi
-
-The global `window.colorSchemeApi` object provides the following interface:
-
-#### Properties
-
-- **`config`** (`ColorSchemeConfig`) - Get or set the current color scheme configuration
-- **`current`** (`object`) - Get the current state including both config and resolved values
-
-#### Methods
-
-- **`subscribe(callback)`** - Subscribe to color scheme changes
-  - `callback`: `(config: ColorSchemeConfig, resolved: ColorSchemeResolve) => void`
-  - Returns: `() => void` - Unsubscribe function
-
-### React Hook
-
-#### `useColorScheme()`
-
-Returns an object with the following properties:
-
-- **`configScheme`** (`ColorSchemeConfig`) - Current configuration (light/dark/system)
-- **`resolvedScheme`** (`ColorSchemeResolve`) - Resolved theme (light/dark)
-- **`setColorScheme`** (`function`) - Function to change the color scheme
-- **`isLight`** (`boolean`) - Whether the current resolved theme is light
-- **`isDark`** (`boolean`) - Whether the current resolved theme is dark
 
 ## License
 
