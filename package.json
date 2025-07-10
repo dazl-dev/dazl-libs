@@ -24,7 +24,7 @@
   "author": "Dazl",
   "license": "MIT",
   "devDependencies": {
-    "@playwright/browser-chromium": "^1.53.2",
+    "@playwright/browser-chromium": "^1.54.0",
     "@playwright/test": "^1.53.2",
     "@types/chai": "^5.2.2",
     "@types/node": "^24.0.11",
