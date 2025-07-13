@@ -3,7 +3,7 @@ import * as ReactDevRuntime from 'react/jsx-dev-runtime';
 const isBrowser = typeof window !== 'undefined';
 const isObjectLike = (value: unknown) => typeof value === 'object' && value !== null;
 
-let propsToSource = new WeakMap<object, ReactDevRuntime.JSXSource>();
+const propsToSource = new WeakMap<object, ReactDevRuntime.JSXSource>();
 
 const jsxDEVKeepSource: typeof ReactDevRuntime.jsxDEV = (type, props, key, isStatic, source, self) => {
     const reactElement = ReactDevRuntime.jsxDEV(type, props, key, isStatic, source, self);
@@ -15,11 +15,7 @@ const jsxDEVKeepSource: typeof ReactDevRuntime.jsxDEV = (type, props, key, isSta
 
 // set on window for later inspection
 if (isBrowser) {
-    if (window.__propsToSource instanceof WeakMap) {
-        propsToSource = window.__propsToSource;
-    } else {
-        window.__propsToSource = propsToSource;
-    }
+    window.__propsToSource = propsToSource;
 }
 
 declare global {
