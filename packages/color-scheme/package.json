@@ -9,11 +9,7 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch",
-    "clean": "rimraf dist",
-    "test": "playwright test --config=playwright.config.ts",
-    "pretest": "npm run clean && npm run build"
+    "test": "playwright test --config=playwright.config.ts"
   },
   "keywords": [
     "color",
@@ -27,7 +23,8 @@
     "src",
     "!**/*.test.*",
     "!**/playwright.config.*",
-    "!**/*.playwright.*"
+    "!**/*.playwright.*",
+    "!dist/tsconfig.tsbuildinfo"
   ],
   "publishConfig": {
     "access": "public"

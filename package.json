@@ -5,12 +5,12 @@
   "type": "module",
   "description": "A collection of utility libraries",
   "scripts": {
-    "pretest": "npm run lint",
-    "test": "npm run test --workspaces",
-    "build": "npm run build --workspaces",
-    "dev": "npm run dev --workspaces",
+    "pretest": "npm run lint && npm run build",
+    "test": "npm run test --workspaces --if-present",
+    "prebuild": "npm run clean",
+    "build": "tsc --build",
     "lint": "eslint",
-    "clean": "npm run clean --workspaces",
+    "clean": "rimraf -g \"./packages/*/dist\"",
     "prettify": "prettier --write ."
   },
   "workspaces": [
