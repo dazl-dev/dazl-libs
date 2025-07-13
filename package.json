@@ -11,7 +11,7 @@
     "dev": "npm run dev --workspaces",
     "lint": "eslint",
     "clean": "npm run clean --workspaces",
-    "prettier": "prettier --write ."
+    "prettify": "prettier --write ."
   },
   "workspaces": [
     "packages/*"
