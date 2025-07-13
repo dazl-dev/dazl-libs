@@ -1,0 +1,28 @@
+{
+  "name": "@dazl/dev",
+  "version": "1.0.0",
+  "description": "Dazl development time utilities.",
+  "type": "module",
+  "exports": {
+    ".": "./dist/jsx-runtime.js",
+    "./jsx-runtime": "./dist/jsx-runtime.js",
+    "./jsx-dev-runtime": "./dist/jsx-runtime.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "src",
+    "!*/tsconfig.{json,tsbuildinfo}"
+  ],
+  "keywords": [
+    "dazl",
+    "react"
+  ],
+  "author": "Dazl",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wixplosives/dazl-libs.git",
+    "directory": "packages/dev"
+  }
+}
