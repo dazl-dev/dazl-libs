@@ -1,6 +1,6 @@
 {
   "name": "@dazl/dev",
-  "version": "1.0.0",
+  "version": "1.1.1",
   "description": "Dazl development time utilities.",
   "type": "module",
   "exports": {
