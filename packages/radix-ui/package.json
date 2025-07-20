@@ -1,6 +1,6 @@
 {
   "name": "@dazl-lib/radix-ui",
-  "version": "1.4.2",
+  "version": "1.0.0",
   "description": "Dazl development metadata for Radix UI",
   "type": "module",
   "exports": {
