@@ -13,7 +13,8 @@
   ],
   "keywords": [
     "dazl",
-    "react"
+    "radix-ui",
+    "metadata"
   ],
   "author": "Dazl",
   "license": "MIT",
