@@ -4,6 +4,7 @@
   "description": "Dazl development metadata for Radix UI",
   "type": "module",
   "exports": {
+    "./types-augmentation.json": "./types-augmentation.json",
     "./package.json": "./package.json"
   },
   "files": [
