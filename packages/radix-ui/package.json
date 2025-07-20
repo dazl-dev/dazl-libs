@@ -1,0 +1,27 @@
+{
+  "name": "@dazl-lib/radix-ui",
+  "version": "1.4.2",
+  "description": "Dazl development metadata for Radix UI",
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "types-augmentation.json",
+    "!*/tsconfig.{json,tsbuildinfo}"
+  ],
+  "keywords": [
+    "dazl",
+    "react"
+  ],
+  "author": "Dazl",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wixplosives/dazl-libs.git",
+    "directory": "packages/radix-ui"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
