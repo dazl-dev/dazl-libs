@@ -1,0 +1,587 @@
+{
+  "data": [
+    {
+      "definition": "node_modules/@radix-ui/react-toggle-group/dist/index.d.mts#/definitions/ToggleGroupImplProps/properties/disabled",
+      "prop": "disabled",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-toggle-group/dist/index.d.mts#/definitions/ToggleGroupImplProps/properties/rovingFocus",
+      "prop": "rovingFocus",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-toggle-group/dist/index.d.mts#/definitions/ToggleGroupImplProps/properties/loop",
+      "prop": "loop",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-toggle-group/dist/index.d.mts#/definitions/ToggleGroupImplProps/properties/orientation",
+      "prop": "orientation",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-toggle-group/dist/index.d.mts#/definitions/ToggleGroupImplProps/properties/dir",
+      "prop": "dir",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-toggle-group/dist/index.d.mts#/definitions/ToggleGroupImplMultipleProps/properties/value",
+      "prop": "value",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-toggle-group/dist/index.d.mts#/definitions/ToggleGroupSingleProps/properties/defaultValue",
+      "prop": "defaultValue",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-toggle-group/dist/index.d.mts#/definitions/ToggleGroupImplSingleProps/properties/value",
+      "prop": "value",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-toggle-group/dist/index.d.mts#/definitions/ToggleGroupImplSingleProps/properties/defaultValue",
+      "prop": "defaultValue",
+      "important": true
+    },
+
+    {
+      "definition": "node_modules/@radix-ui/react-toggle-group/dist/index.d.mts#/definitions/ToggleGroupItemImplProps/properties/value",
+      "prop": "value",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-toggle/dist/index.d.mts#/definitions/ToggleProps/properties/pressed",
+      "prop": "pressed",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-toggle/dist/index.d.mts#/definitions/ToggleProps/properties/defaultPressed",
+      "prop": "defaultPressed",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-tabs/dist/index.d.mts#/definitions/TabsProps/properties/value",
+      "prop": "value",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-tabs/dist/index.d.mts#/definitions/TabsProps/properties/defaultValue",
+      "prop": "defaultValue",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-tabs/dist/index.d.mts#/definitions/TabsProps/properties/orientation",
+      "prop": "orientation",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-tabs/dist/index.d.mts#/definitions/TabsProps/properties/dir",
+      "prop": "dir",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-tabs/dist/index.d.mts#/definitions/TabsProps/properties/activationMode",
+      "prop": "activationMode",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-tabs/dist/index.d.mts#/definitions/TabsListProps/properties/loop",
+      "prop": "loop",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-tabs/dist/index.d.mts#/definitions/TabsTriggerProps/properties/value",
+      "prop": "value",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-tabs/dist/index.d.mts#/definitions/TabsContentProps/properties/value",
+      "prop": "value",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-switch/dist/index.d.mts#/definitions/SwitchProps/properties/checked",
+      "prop": "checked",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-switch/dist/index.d.mts#/definitions/SwitchProps/properties/defaultChecked",
+      "prop": "defaultChecked",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-switch/dist/index.d.mts#/definitions/SwitchProps/properties/required",
+      "prop": "required",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-separator/dist/index.d.mts#/definitions/SeparatorProps/properties/orientation",
+      "prop": "orientation",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-separator/dist/index.d.mts#/definitions/SeparatorProps/properties/decorative",
+      "prop": "decorative",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-select/dist/index.d.mts#/definitions/SelectSharedProps/properties/open",
+      "prop": "open",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-select/dist/index.d.mts#/definitions/SelectSharedProps/properties/defaultOpen",
+      "prop": "defaultOpen",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-select/dist/index.d.mts#/definitions/SelectSharedProps/properties/dir",
+      "prop": "dir",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-select/dist/index.d.mts#/definitions/SelectSharedProps/properties/name",
+      "prop": "name",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-select/dist/index.d.mts#/definitions/SelectSharedProps/properties/autoComplete",
+      "prop": "autoComplete",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-select/dist/index.d.mts#/definitions/SelectSharedProps/properties/disabled",
+      "prop": "disabled",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-select/dist/index.d.mts#/definitions/SelectSharedProps/properties/required",
+      "prop": "required",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-select/dist/index.d.mts#/definitions/SelectSharedProps/properties/form",
+      "prop": "form",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-select/dist/index.d.mts#/definitions/SelectProps/properties/value",
+      "prop": "value",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-select/dist/index.d.mts#/definitions/SelectProps/properties/defaultValue",
+      "prop": "defaultValue",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-select/dist/index.d.mts#/definitions/SelectValueProps/properties/placeholder",
+      "prop": "placeholder",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-select/dist/index.d.mts#/definitions/SelectItemProps/properties/value",
+      "prop": "value",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-select/dist/index.d.mts#/definitions/SelectItemProps/properties/disabled",
+      "prop": "disabled",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-scroll-area/dist/index.d.mts#/definitions/ScrollAreaProps/properties/dir",
+      "prop": "dir",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-scroll-area/dist/index.d.mts#/definitions/ScrollAreaProps/properties/scrollHideDelay",
+      "prop": "scrollHideDelay",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-scroll-area/dist/index.d.mts#/definitions/ScrollAreaScrollbarVisibleProps/properties/orientation",
+      "prop": "orientation",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-radio-group/dist/index.d.mts#/definitions/RadioGroupProps/properties/name",
+      "prop": "name",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-radio-group/dist/index.d.mts#/definitions/RadioGroupProps/properties/required",
+      "prop": "required",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-radio-group/dist/index.d.mts#/definitions/RadioGroupProps/properties/disabled",
+      "prop": "disabled",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-radio-group/dist/index.d.mts#/definitions/RadioGroupProps/properties/dir",
+      "prop": "dir",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-radio-group/dist/index.d.mts#/definitions/RadioGroupProps/properties/loop",
+      "prop": "loop",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-radio-group/dist/index.d.mts#/definitions/RadioGroupProps/properties/defaultValue",
+      "prop": "defaultValue",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-radio-group/dist/index.d.mts#/definitions/RadioGroupProps/properties/value",
+      "prop": "value",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-radio-group/dist/index.d.mts#/definitions/RadioGroupItemProps/properties/value",
+      "prop": "value",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-popover/dist/index.d.mts#/definitions/PopoverProps/properties/open",
+      "prop": "open",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-popover/dist/index.d.mts#/definitions/PopoverProps/properties/defaultOpen",
+      "prop": "defaultOpen",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-popover/dist/index.d.mts#/definitions/PopoverProps/properties/modal",
+      "prop": "modal",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-navigation-menu/dist/index.d.mts#/definitions/NavigationMenuProps/properties/value",
+      "prop": "value",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-navigation-menu/dist/index.d.mts#/definitions/NavigationMenuProps/properties/defaultValue",
+      "prop": "defaultValue",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-navigation-menu/dist/index.d.mts#/definitions/NavigationMenuProps/properties/dir",
+      "prop": "dir",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-navigation-menu/dist/index.d.mts#/definitions/NavigationMenuProps/properties/orientation",
+      "prop": "orientation",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-navigation-menu/dist/index.d.mts#/definitions/NavigationMenuProps/properties/delayDuration",
+      "prop": "delayDuration",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-navigation-menu/dist/index.d.mts#/definitions/NavigationMenuProps/properties/skipDelayDuration",
+      "prop": "skipDelayDuration",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-menubar/dist/index.d.mts#/definitions/MenubarProps/properties/value",
+      "prop": "value",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-menubar/dist/index.d.mts#/definitions/MenubarProps/properties/defaultValue",
+      "prop": "defaultValue",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-menubar/dist/index.d.mts#/definitions/MenubarProps/properties/loop",
+      "prop": "loop",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-menubar/dist/index.d.mts#/definitions/MenubarProps/properties/dir",
+      "prop": "dir",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-menubar/dist/index.d.mts#/definitions/MenubarSubProps/properties/open",
+      "prop": "open",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-menubar/dist/index.d.mts#/definitions/MenubarSubProps/properties/defaultOpen",
+      "prop": "defaultOpen",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-popper/dist/index.d.mts#/definitions/PopperContentProps/properties/side",
+      "prop": "side",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-popper/dist/index.d.mts#/definitions/PopperContentProps/properties/sideOffset",
+      "prop": "sideOffset",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-popper/dist/index.d.mts#/definitions/PopperContentProps/properties/align",
+      "prop": "align",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-popper/dist/index.d.mts#/definitions/PopperContentProps/properties/alignOffset",
+      "prop": "alignOffset",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-popper/dist/index.d.mts#/definitions/PopperContentProps/properties/arrowPadding",
+      "prop": "arrowPadding",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-popper/dist/index.d.mts#/definitions/PopperContentProps/properties/avoidCollisions",
+      "prop": "avoidCollisions",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-popper/dist/index.d.mts#/definitions/PopperContentProps/properties/collisionPadding",
+      "prop": "collisionPadding",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-popper/dist/index.d.mts#/definitions/PopperContentProps/properties/sticky",
+      "prop": "sticky",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-popper/dist/index.d.mts#/definitions/PopperContentProps/properties/updatePositionStrategy",
+      "prop": "updatePositionStrategy",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-popper/dist/index.d.mts#/definitions/PopperContentProps/properties/hideWhenDetached",
+      "prop": "hideWhenDetached",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-hover-card/dist/index.d.mts#/definitions/HoverCardProps/properties/open",
+      "prop": "open",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-hover-card/dist/index.d.mts#/definitions/HoverCardProps/properties/defaultOpen",
+      "prop": "defaultOpen",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-hover-card/dist/index.d.mts#/definitions/HoverCardProps/properties/openDelay",
+      "prop": "openDelay",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-hover-card/dist/index.d.mts#/definitions/HoverCardProps/properties/closeDelay",
+      "prop": "closeDelay",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-dropdown-menu/dist/index.d.mts#/definitions/DropdownMenuProps/properties/open",
+      "prop": "open",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-dropdown-menu/dist/index.d.mts#/definitions/DropdownMenuProps/properties/defaultOpen",
+      "prop": "defaultOpen",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-dropdown-menu/dist/index.d.mts#/definitions/DropdownMenuProps/properties/dir",
+      "prop": "dir",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-dropdown-menu/dist/index.d.mts#/definitions/DropdownMenuProps/properties/modal",
+      "prop": "modal",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-dropdown-menu/dist/index.d.mts#/definitions/DropdownMenuSubProps/properties/open",
+      "prop": "open",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-dropdown-menu/dist/index.d.mts#/definitions/DropdownMenuSubProps/properties/defaultOpen",
+      "prop": "defaultOpen",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-context-menu/dist/index.d.mts#/definitions/ContextMenuProps/properties/modal",
+      "prop": "modal",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-context-menu/dist/index.d.mts#/definitions/ContextMenuProps/properties/dir",
+      "prop": "dir",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-context-menu/dist/index.d.mts#/definitions/ContextMenuTriggerProps/properties/disabled",
+      "prop": "disabled",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-context-menu/dist/index.d.mts#/definitions/ContextMenuSubProps/properties/open",
+      "prop": "open",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-context-menu/dist/index.d.mts#/definitions/ContextMenuSubProps/properties/defaultOpen",
+      "prop": "defaultOpen",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-menu/dist/index.d.mts#/definitions/MenuItemImplProps/properties/disabled",
+      "prop": "disabled",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-menu/dist/index.d.mts#/definitions/MenuRadioGroupProps/properties/value",
+      "prop": "value",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-menu/dist/index.d.mts#/definitions/MenuCheckboxItemProps/properties/checked",
+      "prop": "checked",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-collapsible/dist/index.d.mts#/definitions/CollapsibleProps/properties/defaultOpen",
+      "prop": "defaultOpen",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-collapsible/dist/index.d.mts#/definitions/CollapsibleProps/properties/open",
+      "prop": "open",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-collapsible/dist/index.d.mts#/definitions/CollapsibleProps/properties/disabled",
+      "prop": "disabled",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-avatar/dist/index.d.mts#/definitions/AvatarFallbackProps/properties/delayMs",
+      "prop": "delayMs",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-aspect-ratio/dist/index.d.mts#/definitions/AspectRatioProps/properties/ratio",
+      "prop": "ratio",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-dialog/dist/index.d.mts#/definitions/DialogContentImplProps/properties/trapFocus",
+      "prop": "trapFocus",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-dialog/dist/index.d.mts#/definitions/DialogProps/properties/open",
+      "prop": "open",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-dialog/dist/index.d.mts#/definitions/DialogProps/properties/defaultOpen",
+      "prop": "defaultOpen",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-dialog/dist/index.d.mts#/definitions/DialogProps/properties/modal",
+      "prop": "modal",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-dialog/dist/index.d.mts#/definitions/DialogProps/properties/open",
+      "prop": "open",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-collapsible/dist/index.d.mts#/definitions/CollapsibleProps/properties/disabled",
+      "prop": "disabled",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-slider/dist/index.d.mts#/definitions/SliderProps/properties/disabled",
+      "prop": "disabled",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-slider/dist/index.d.mts#/definitions/SliderProps/properties/orientation",
+      "prop": "orientation",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-slider/dist/index.d.mts#/definitions/SliderProps/properties/min",
+      "prop": "min",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-slider/dist/index.d.mts#/definitions/SliderProps/properties/max",
+      "prop": "max",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-slider/dist/index.d.mts#/definitions/SliderProps/properties/step",
+      "prop": "step",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-slider/dist/index.d.mts#/definitions/SliderProps/properties/minStepBetweenThumbs",
+      "prop": "minStepBetweenThumbs",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-slider/dist/index.d.mts#/definitions/SliderProps/properties/defaultValue",
+      "prop": "defaultValue",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-slider/dist/index.d.mts#/definitions/SliderProps/properties/value",
+      "prop": "value",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-slider/dist/index.d.mts#/definitions/SliderProps/properties/inverted",
+      "prop": "inverted",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-checkbox/dist/index.d.mts#/definitions/CheckboxProps/properties/required",
+      "prop": "required",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-checkbox/dist/index.d.mts#/definitions/CheckboxProps/properties/checked",
+      "prop": "checked",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-checkbox/dist/index.d.mts#/definitions/CheckboxProps/properties/defaultChecked",
+      "prop": "defaultChecked",
+      "important": true
+    },
+    {
+      "definition": "node_modules/@radix-ui/react-progress/dist/index.d.mts#/definitions/ProgressProps/properties/value",
+      "prop": "value",
+      "important": true,
+      "min": 0,
+      "max": 100
+    }
+  ]
+}
