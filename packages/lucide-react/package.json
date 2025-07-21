@@ -1,0 +1,22 @@
+{
+  "name": "@dazl-libs/lucide-react",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsx build.tsx"
+  },
+  "dependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "devDependencies": {
+    "@file-services/node": "^10.0.1",
+    "@types/node": "^18.0.0",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "lucide-react": "^0.525.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.0.0"
+  }
+}
