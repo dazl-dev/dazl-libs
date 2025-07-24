@@ -1,7 +1,7 @@
 {
   "name": "@dazl-libs/lucide-react",
   "version": "1.0.0",
-  "main": "index.js",
+  "type": "module",
   "license": "MIT",
   "exports": {
     ".": {
@@ -15,6 +15,7 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "build": "tsx build.tsx"
+    "build": "node do-build.ts",
+    "prepack": "npm run build"
   }
 }

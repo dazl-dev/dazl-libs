@@ -1,4 +1,4 @@
-# dazl-lucide-react
+# @dazl-libs/lucide-react
 
 **dazl-lucide-react** is a utility library for working with the [Lucide](https://lucide.dev/) icon set in React projects. It provides utilities to list all available icons and access prerendered SVGs programmatically, making it easy to integrate Lucide icons into your workflows or build tools.
 
@@ -19,8 +19,8 @@ npm install @dazl-libs/lucide-react
 
 ```js
 import iconList from '@dazl-libs/lucide-react';
-import PrerenderdCameraSVG from '@/@dazl-libs/lucide-react/camera.svg';
- 
+import PrerenderdCameraSVG from '@dazl-libs/lucide-react/camera.svg';
+
 ## Prerendered SVGs
 
 All icons are available as prerendered SVG strings or files, suitable for direct embedding or further processing.
@@ -28,3 +28,4 @@ All icons are available as prerendered SVG strings or files, suitable for direct
 ## License
 
 [MIT](./LICENSE)
+```

@@ -9,12 +9,6 @@ interface IconData {
     svgString: string;
 }
 
-interface IconListEntry {
-    name: string;
-    aliases: string[];
-    file: string;
-}
-
 interface IconTypeAugmentation {
     name: string;
     aliases: string[];
@@ -26,7 +20,7 @@ interface TypeAugmentationFile {
 }
 
 function buildIcons(): void {
-    const distDir = nodeFs.join(__dirname, 'dist');
+    const distDir = nodeFs.join(import.meta.dirname, 'dist');
     const svgDir = nodeFs.join(distDir, 'svg');
 
     nodeFs.ensureDirectorySync(distDir);
@@ -50,7 +44,7 @@ function buildIcons(): void {
         }
 
         // Icon components have uppercase first letter
-        if (exportName[0] !== exportName[0].toUpperCase()) {
+        if (exportName[0] !== exportName[0]?.toUpperCase()) {
             continue;
         }
 
@@ -85,7 +79,6 @@ function buildIcons(): void {
         }
     }
 
-    const iconsList: IconListEntry[] = [];
     const iconsTypeAugmentation: IconTypeAugmentation[] = [];
 
     // Save unique SVGs and build icons list
@@ -102,25 +95,16 @@ function buildIcons(): void {
             aliases: aliases,
             file: `svg/${filename}`,
         };
-        
-        iconsList.push(iconEntry);
+
         iconsTypeAugmentation.push(iconEntry);
     }
 
-    // Save icons list JSON
-    const iconsListPath = nodeFs.join(distDir, 'icons-list.json');
-    nodeFs.writeFileSync(iconsListPath, JSON.stringify(iconsList, null, 2));
-
     // Save type augmentation file
     const typeAugmentationFile: TypeAugmentationFile = {
-        icons: iconsTypeAugmentation
+        icons: iconsTypeAugmentation,
     };
     const typeAugmentationPath = nodeFs.join(distDir, 'types-augmentation.json');
     nodeFs.writeFileSync(typeAugmentationPath, JSON.stringify(typeAugmentationFile, null, 2));
-}
-
-if (require.main === module) {
-    buildIcons();
 }
 
 export default buildIcons;
