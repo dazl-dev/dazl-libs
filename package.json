@@ -28,7 +28,7 @@
     "@playwright/test": "^1.54.1",
     "@types/chai": "^5.2.2",
     "@types/node": "^24.1.0",
-    "@types/react": "^19.1.8",
+    "@types/react": "^19.1.9",
     "chai": "^5.2.1",
     "eslint": "^9.32.0",
     "eslint-config-prettier": "^10.1.8",
