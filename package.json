@@ -30,7 +30,7 @@
     "@types/node": "^24.2.0",
     "@types/react": "^19.1.9",
     "chai": "^5.2.1",
-    "eslint": "^9.32.0",
+    "eslint": "^9.33.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-no-only-tests": "^3.3.0",
     "eslint-plugin-react": "^7.37.5",
