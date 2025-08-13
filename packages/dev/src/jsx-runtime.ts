@@ -3,6 +3,51 @@ import * as ReactDevRuntime from 'react/jsx-dev-runtime';
 const isBrowser = typeof window !== 'undefined';
 const isObjectLike = (value: unknown) => typeof value === 'object' && value !== null;
 
+const isSourceEqual = (
+    source1: ReactDevRuntime.JSXSource | undefined,
+    source2: ReactDevRuntime.JSXSource | undefined,
+): boolean => {
+    if (source1 === source2) {
+        return true;
+    }
+    if (!source1 || !source2) {
+        return false;
+    }
+    return (
+        source1.fileName === source2.fileName &&
+        source1.lineNumber === source2.lineNumber &&
+        source1.columnNumber === source2.columnNumber
+    );
+};
+
+//make fragment children always unique array, so we can have source location for them in all cases.
+const makeFragmentChildrenUniqueArray = (
+    type: React.ElementType,
+    props: unknown,
+    isStaticChildrenArray: boolean,
+    source: ReactDevRuntime.JSXSource | undefined,
+) => {
+    if (type !== ReactDevRuntime.Fragment || !isObjectLike(props) || !('children' in props) || !source) {
+        return isStaticChildrenArray;
+    }
+    //if there is a single child, we wrap in an array so there will be a source location for the fragment.
+    // and tell react that this is a static children array. to avoid warning about a missing key.
+    //it seems that keys validation is the only thing that the "isStatic" flag is used for.
+    if (!Array.isArray(props.children)) {
+        props.children = [props.children];
+        return true;
+    }
+    // this is for the case when the user passed same array to two different fragments. we want to avoid one overwriting the other.
+    // this solution might create bugs if we try to trace the children array back to the source. I believe we currently don't do that.
+    // and that it's a rare enough case. and worth the consistency in source location.
+    const existingEntry = propsToSource.get(props.children);
+    //we check of source equality to avoid creating a new array if the source is the same. happens with double render in dev mode.
+    if (existingEntry && !isSourceEqual(existingEntry, source)) {
+        props.children = [...(props.children as unknown[])];
+    }
+    return isStaticChildrenArray;
+};
+
 //we add a key on fragment so it will always have a fiber.
 // with current react version (19) they don't have a fiber if there is no key and they are an only child.
 const generateKeyForFragment = (
@@ -20,9 +65,10 @@ const generateKeyForFragment = (
 const propsToSource = new WeakMap<object, ReactDevRuntime.JSXSource>();
 
 const jsxDEVKeepSource: typeof ReactDevRuntime.jsxDEV = (type, props, key, isStatic, source, self) => {
+    const isStaticChildrenArray = makeFragmentChildrenUniqueArray(type, props, isStatic, source);
     const elementKey = generateKeyForFragment(type, key, source) || key;
 
-    const reactElement = ReactDevRuntime.jsxDEV(type, props, elementKey, isStatic, source, self);
+    const reactElement = ReactDevRuntime.jsxDEV(type, props, elementKey, isStaticChildrenArray, source, self);
 
     if (source && isObjectLike(reactElement.props)) {
         propsToSource.set(reactElement.props, source);
