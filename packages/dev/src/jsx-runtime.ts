@@ -71,7 +71,16 @@ const jsxDEVKeepSource: typeof ReactDevRuntime.jsxDEV = (type, props, key, isSta
     const reactElement = ReactDevRuntime.jsxDEV(type, props, elementKey, isStaticChildrenArray, source, self);
 
     if (source && isObjectLike(reactElement.props)) {
-        propsToSource.set(reactElement.props, source);
+        //fragments have props.children as fiber.props instead of props object.
+        if (
+            type === ReactDevRuntime.Fragment &&
+            'children' in reactElement.props &&
+            isObjectLike(reactElement.props.children)
+        ) {
+            propsToSource.set(reactElement.props.children, source);
+        } else {
+            propsToSource.set(reactElement.props, source);
+        }
     }
     return reactElement;
 };
