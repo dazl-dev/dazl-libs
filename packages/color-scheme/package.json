@@ -6,6 +6,7 @@
   "exports": {
     "./react": "./dist/react.js",
     "./client": "./dist/client.js",
+    "./types": "./dist/types.js",
     "./package.json": "./package.json"
   },
   "scripts": {
