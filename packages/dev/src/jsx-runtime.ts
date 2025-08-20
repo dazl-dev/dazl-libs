@@ -3,50 +3,17 @@ import * as ReactDevRuntime from 'react/jsx-dev-runtime';
 const isBrowser = typeof window !== 'undefined';
 const isObjectLike = (value: unknown) => typeof value === 'object' && value !== null;
 
-const isSourceEqual = (
-    source1: ReactDevRuntime.JSXSource | undefined,
-    source2: ReactDevRuntime.JSXSource | undefined,
-): boolean => {
-    if (source1 === source2) {
-        return true;
-    }
-    if (!source1 || !source2) {
-        return false;
-    }
-    return (
-        source1.fileName === source2.fileName &&
-        source1.lineNumber === source2.lineNumber &&
-        source1.columnNumber === source2.columnNumber
-    );
-};
-
-//make fragment children always unique array, so we can use fragment fiber props as a key in WeakMaps. (for fragments the props is the children on the fiber)
+//make fragment children always an array, so we can use fragment fiber props as a key in WeakMaps. (for fragments the props is the children on the fiber)
 //for example we have a props to fiber map and a props to src location map
-const updateFragmentChildrenToUniqueArray = (
-    type: React.ElementType,
-    props: unknown,
-    isStaticChildrenArray: boolean,
-    source: ReactDevRuntime.JSXSource | undefined,
-) => {
-    if (type !== ReactDevRuntime.Fragment || !isObjectLike(props) || !('children' in props) || !source) {
+const updateFragmentChildrenToArray = (props: unknown, isStaticChildrenArray: boolean) => {
+    if (!isObjectLike(props) || !('children' in props) || Array.isArray(props.children)) {
         return isStaticChildrenArray;
     }
     //if there is a single child, we wrap in an array. so it will always be an object and can be used as key in a WeakMap
     // and tell react that this is a static children array. to avoid warning about a missing key.
     //it seems that keys validation is the only thing that the "isStatic" flag is used for.
-    if (!Array.isArray(props.children)) {
-        props.children = [props.children];
-        return true;
-    }
-    // this is for the case when the user passed same array to two different fragments. we want to avoid one overwriting the other.
-    // this solution might create bugs if we try to trace the children array back to the source. I believe we currently don't do that.
-    // and that it's a rare enough case. and worth the consistency in source location.
-    const existingEntry = propsToSource.get(props.children);
-    //we check source equality to avoid creating a new array if the source is the same. happens with double render in dev mode.
-    if (existingEntry && !isSourceEqual(existingEntry, source)) {
-        props.children = [...(props.children as unknown[])];
-    }
-    return isStaticChildrenArray;
+    props.children = [props.children];
+    return true;
 };
 
 // we add a key on fragment so it will always have a fiber.
@@ -61,8 +28,7 @@ const propsToSource = new WeakMap<object, ReactDevRuntime.JSXSource>();
 const jsxDEVKeepSource: typeof ReactDevRuntime.jsxDEV = (type, props, key, isStatic, source, self) => {
     const isFragmentWithSource = type === ReactDevRuntime.Fragment && source;
     const elementKey = isFragmentWithSource && key === undefined ? generateKeyFromJSXSource(source) : key;
-
-    const isStaticChildrenArray = updateFragmentChildrenToUniqueArray(type, props, isStatic, source);
+    const isStaticChildrenArray = isFragmentWithSource ? updateFragmentChildrenToArray(props, isStatic) : isStatic;
 
     const reactElement = ReactDevRuntime.jsxDEV(type, props, elementKey, isStaticChildrenArray, source, self);
 
