@@ -56,7 +56,7 @@ const propsToSource = new WeakMap<object, ReactDevRuntime.JSXSource>();
 const jsxDEVKeepSource: typeof ReactDevRuntime.jsxDEV = (type, props, key, isStaticChildrenArray, source, self) => {
     const isFragmentWithSource = type === ReactDevRuntime.Fragment && source;
     if (isFragmentWithSource) {
-        key = key || generateKeyFromJSXSource(source);
+        key = key === undefined ? generateKeyFromJSXSource(source) : key;
         if (isObjectLike(props) && 'children' in props) {
             isStaticChildrenArray = updateFragmentChildrenToArray(props, isStaticChildrenArray);
             cloneFragmentChildrenIfDuplicate(props, source);
