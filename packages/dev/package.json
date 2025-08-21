@@ -22,7 +22,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wixplosives/dazl-libs.git",
+    "url": "git+https://github.com/dazl-dev/dazl-libs.git",
     "directory": "packages/dev"
   },
   "publishConfig": {
