@@ -17,15 +17,15 @@ const jsxDEVKeepSource: typeof ReactDevRuntime.jsxDEV = (type, props, key, isSta
         // to test if it is still needed add a component returning a fragment and see if the fragment has fiber
         key = key === undefined ? generateKeyFromJSXSource(source) : key;
         if (isObjectLike(props) && 'children' in props) {
-            //make fragment children always an array, so we can use fragment fiber props as a key in WeakMaps. (for fragments the props is the children on the fiber)
-            //for example we have a props to fiber map and a props to src location map
+            // make fragment children always an array, so we can use fragment fiber props as a key in WeakMaps. (for fragments the props is the children on the fiber)
+            // for example we have a props to fiber map and a props to src location map
             if (!Array.isArray(props.children)) {
                 props = { ...props, children: [props.children] };
                 // tell react that this is a static children array. to avoid warning about a missing key.
-                //it seems that keys validation is the only thing that the "isStatic" flag is used for.
+                // it seems that keys validation is the only thing that the "isStatic" flag is used for.
                 isStatic = true;
             }
-            //now that the props.children in always an array add it to the propsToSource map. (for fragment fiber.props there's props.children)
+            // now that the props.children in always an array add it to the propsToSource map. (for fragment fiber.props there's props.children)
             propsToSource.set((props as { children: unknown[] }).children, source);
         }
     }
