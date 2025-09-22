@@ -1,92 +1,13 @@
 import { expect } from 'chai';
 import { type ActionType } from './base-store.ts';
-
-import { BaseStore } from './base-store.ts';
-
-type TestStoreState = {
-    count: number;
-    text: string;
-    nested: {
-        value: number;
-    };
-};
-// Test implementation of BaseStore
-class TestStore extends BaseStore<TestStoreState> {
-    static id = TestStore.uniqueId('TestStore', import.meta.url);
-    constructor(initialState = { count: 0, text: 'hello', nested: { value: 1 } }) {
-        super(initialState);
-    }
-
-    increment = this.action<{ amount?: number } | void>('INCREMENT', ({ amount = 1 } = {}) => {
-        this.state = {
-            ...this.state,
-            count: this.state.count + amount,
-        };
-    });
-
-    setText = this.action<{ text: string }>('SET_TEXT', ({ text }) => {
-        this.state = {
-            ...this.state,
-            text,
-        };
-    });
-
-    setNested = this.action<{ value: number }>('SET_NESTED', ({ value }) => {
-        this.state = {
-            ...this.state,
-            nested: { ...this.state.nested, value },
-        };
-    });
-
-    throwError = this.action('THROW_ERROR', () => {
-        this.state = { ...this.state }; // to ensure state is "touched" and reverted
-        throw new Error('Test error');
-    });
-
-    asyncAction = this.action<{ newCount: number }>('ASYNC_ACTION', async ({ newCount }) => {
-        await new Promise((resolve) => setTimeout(resolve, 0));
-        this.state = {
-            ...this.state,
-            count: newCount,
-        };
-    });
-
-    abortedAsyncAction = this.action<{ newCount: number }>('SLOW_ASYNC_ACTION', async ({ newCount }) => {
-        this.state = {
-            ...this.state,
-            count: newCount,
-        };
-        await new Promise((resolve) => setTimeout(resolve, 20));
-        this.abort();
-    });
-
-    batchedAction = this.action<{ increment1: number; increment2: number; text: string }>(
-        'BATCHED_ACTION',
-        async ({ increment1, increment2, text }) => {
-            await this.increment({ amount: increment1 });
-            await this.increment({ amount: increment2 });
-            await this.setText({ text });
-        },
-    );
-
-    nestedBatchedAction = this.action<{ step1: number; step2: number; text: string; nestedValue: number }>(
-        'NESTED_BATCHED',
-        async ({ step1, step2, text, nestedValue }) => {
-            await this.batchedAction({
-                increment1: step1,
-                increment2: step2,
-                text,
-            });
-            await this.setNested({ value: nestedValue });
-        },
-    );
-}
+import { TestStore } from './test-store.ts';
 
 describe('BaseStore', () => {
     let store: TestStore;
     let subscriberCallback: string[];
 
     beforeEach(() => {
+        TestStore['ids'].clear();
         store = new TestStore();
         subscriberCallback = [];
     });
@@ -102,6 +23,37 @@ describe('BaseStore', () => {
             // This test only fail at TypeScript compile time.
             // @ts-expect-error The store state is readonly
             store.state.nested.value = 10;
+        });
+    });
+
+    describe('Static Methods', () => {
+        describe('uniqueId', () => {
+            it('should create a unique id', () => {
+                const id = TestStore.uniqueId('testId', 'file:///test/path.ts');
+                expect(id).to.equal('testId');
+            });
+
+            it('should throw error when id contains "@" character', () => {
+                expect(() => {
+                    TestStore.uniqueId('invalid@id', 'file:///test/path.ts');
+                }).to.throw('id "invalid@id" cannot contain "@" character');
+            });
+
+            it('should throw error for duplicate ids from different files', () => {
+                // First registration
+                TestStore.uniqueId('duplicateId', 'file:///test/path1.ts');
+
+                // Second registration with same id but different path should throw
+                expect(() => {
+                    TestStore.uniqueId('duplicateId', 'file:///test/path2.ts');
+                }).to.throw('Duplicate id "duplicateId@/test/path1.ts" found in "duplicateId@/test/path2.ts"');
+            });
+
+            it('should allow same id from same file (re-registration)', () => {
+                const id1 = TestStore.uniqueId('sameFileId', 'file:///test/same.ts');
+                const id2 = TestStore.uniqueId('sameFileId', 'file:///test/same.ts');
+                expect(id1).to.equal(id2);
+            });
         });
     });
 
@@ -441,6 +393,12 @@ describe('BaseStore', () => {
             expect(lastNotification).to.not.equal(null);
             expect(lastNotification!.actions).to.have.length(1);
             expect(lastNotification!.actions[0]!.type).to.equal('INCREMENT');
+        });
+
+        it('should throw error when trying to abort with no active action', () => {
+            expect(() => {
+                store['abort']();
+            }).to.throw('No action is currently running to abort');
         });
     });
 

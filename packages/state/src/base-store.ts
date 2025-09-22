@@ -31,12 +31,12 @@ export abstract class BaseStore<T extends object> {
      * }
      */
     static uniqueId<T extends string>(id: T, url: string): StoreUniqueId<T> {
-        const parsedUrl = new URL(url).pathname;
+        const { pathname } = new URL(url);
         if (id.includes('@')) {
             throw new Error(`id "${id}" cannot contain "@" character`);
         }
         const existing = this.ids.get(id);
-        const key = `${id}@${parsedUrl}`;
+        const key = `${id}@${pathname}`;
         if (existing && existing !== key) {
             throw new Error(`Duplicate id "${existing}" found in "${key}"`);
         }
@@ -100,9 +100,6 @@ export abstract class BaseStore<T extends object> {
         fn: (payload: P) => void | Promise<void>,
     ) => {
         return async (payload: P) => {
-            if (this.abortController?.signal.aborted) {
-                throw new Error('Action aborted');
-            }
             const action: ActionType = { type, payload };
             const isRoot = this.batchCount === 0;
             if (isRoot) {
@@ -145,6 +142,24 @@ export abstract class BaseStore<T extends object> {
         } else {
             throw new Error('No action is currently running to abort');
         }
+    }
+
+    /**
+     * Restore state from a history entry (used by History class)
+     * This method allows controlled restoration of previous states
+     * while properly notifying subscribers of the change.
+     */
+    restoreFromHistory(newState: DeepReadonly<T>): void {
+        const prevState = this.state;
+        this.state = newState;
+
+        // Create a HISTORY_RESTORE action to notify subscribers
+        const restoreAction: ActionType = {
+            type: 'HISTORY_RESTORE',
+            payload: { timestamp: Date.now() },
+        };
+
+        this.notifySubscribers(prevState, newState, [restoreAction]);
     }
 
     private notifySubscribers = (prevState: DeepReadonly<T>, nextState: DeepReadonly<T>, actions: ActionType[]) => {
