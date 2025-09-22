@@ -445,6 +445,204 @@ describe('BaseStore', () => {
             expect(store['batchCount']).to.equal(0);
             expect(store['batchedActions']).to.equal(undefined);
             expect(store['initialState']).to.equal(undefined);
+            expect(store['flushedState']).to.equal(undefined);
+        });
+    });
+
+    describe('Flush Mechanism', () => {
+        it('should throw error when flush is called outside of an action batch', () => {
+            expect(() => {
+                store.testFlush();
+            }).to.throw('Cannot flush outside of an action batch');
+        });
+
+        it('should flush actions and create FLUSH action with correct payload', async () => {
+            let callCount = 0;
+            let capturedActions: ActionType[] = [];
+
+            store.subscribe((prevState, nextState, actions) => {
+                callCount++;
+                capturedActions = [...actions];
+            });
+
+            await store.flushingAction({
+                increment1: 2,
+                increment2: 3,
+                text: 'flushed',
+            });
+
+            // Should only get one notification due to flush, then one more for final actions
+            expect(callCount).to.equal(2);
+
+            // First notification should be the flush
+            expect(capturedActions[0]!.type).to.equal('FLUSH');
+            const flushPayload = capturedActions[0]!.payload as Record<string, unknown>;
+            expect(flushPayload.flushedActionTypes).to.deep.equal(['FLUSHING_ACTION', 'INCREMENT', 'INCREMENT']);
+
+            // Verify final state is correct
+            expect(store.state.count).to.equal(5); // 0 + 2 + 3
+            expect(store.state.text).to.equal('flushed');
+        });
+
+        it('should prevent duplicate flush notifications in same batch when flush is called at the end of an action', async () => {
+            let callCount = 0;
+            const allCapturedActions: ActionType[][] = [];
+
+            store.subscribe((prevState, nextState, actions) => {
+                callCount++;
+                allCapturedActions.push([...actions]);
+            });
+
+            await store.doubleFlushAction({
+                increment1: 2,
+                increment2: 3,
+            });
+
+            // Should get exactly 2 notifications: one from first flush, one from final batch completion
+            expect(callCount).to.equal(2);
+
+            // First notification should be from the first flush - the actual batched actions
+            expect(allCapturedActions[0]!.length).to.equal(2);
+            expect(allCapturedActions[0]![0]!.type).to.equal('DOUBLE_FLUSH_ACTION');
+            expect(allCapturedActions[0]![1]!.type).to.equal('INCREMENT');
+
+            // Second notification should be final completion with FLUSH and remaining actions
+            expect(allCapturedActions[1]!.length).to.equal(2);
+            expect(allCapturedActions[1]![0]!.type).to.equal('FLUSH');
+            expect(allCapturedActions[1]![1]!.type).to.equal('INCREMENT');
+
+            // The FLUSH action should have the correct payload
+            const flushPayload = allCapturedActions[1]![0]!.payload as Record<string, unknown>;
+            expect(flushPayload.flushedActionTypes).to.deep.equal(['DOUBLE_FLUSH_ACTION', 'INCREMENT']);
+        });
+
+        it('should use flushed state as previous state for subsequent notifications', async () => {
+            const notificationStates: Array<{ prev: typeof store.state; next: typeof store.state }> = [];
+
+            store.subscribe((prevState, nextState) => {
+                notificationStates.push({ prev: prevState, next: nextState });
+            });
+
+            // Create a more complex action with multiple flush steps
+            const multiFlushAction = store['action']('MULTI_FLUSH_ACTION', async () => {
+                // Step 1: increment count and flush
+                await store.increment({ amount: 2 });
+                await store.increment({ amount: 3 });
+                store['flush'](); // First flush: count goes from 0 -> 5
+
+                // Step 2: change text and increment more, then flush again
+                await store.setText({ text: 'after first flush' });
+                await store.increment({ amount: 1 });
+                store['flush'](); // Second flush: text changes and count goes from 5 -> 6
+
+                // Step 3: final changes after second flush
+                await store.setNested({ value: 99 });
+                await store.setText({ text: 'final text' });
+            });
+
+            await multiFlushAction();
+
+            expect(notificationStates.length).to.equal(3);
+
+            // First notification: initial state -> state after first flush (count: 0->5)
+            expect(notificationStates[0]!.prev.count).to.equal(0);
+            expect(notificationStates[0]!.next.count).to.equal(5);
+            expect(notificationStates[0]!.prev.text).to.equal('hello');
+            expect(notificationStates[0]!.next.text).to.equal('hello'); // text unchanged in first flush
+
+            // Second notification: first flushed state -> state after second flush
+            // Previous state should be the state from first flush, not the original state
+            expect(notificationStates[1]!.prev.count).to.equal(5); // Uses flushed state as previous
+            expect(notificationStates[1]!.next.count).to.equal(6);
+            expect(notificationStates[1]!.prev.text).to.equal('hello'); // Previous from first flush
+            expect(notificationStates[1]!.next.text).to.equal('after first flush');
+
+            // Third notification: second flushed state -> final state
+            // Previous state should be the state from second flush
+            expect(notificationStates[2]!.prev.count).to.equal(6); // Uses second flushed state as previous
+            expect(notificationStates[2]!.next.count).to.equal(6); // No count change in final step
+            expect(notificationStates[2]!.prev.text).to.equal('after first flush'); // Previous from second flush
+            expect(notificationStates[2]!.next.text).to.equal('final text');
+            expect(notificationStates[2]!.prev.nested.value).to.equal(1); // Previous from second flush
+            expect(notificationStates[2]!.next.nested.value).to.equal(99);
+        });
+
+        it('should handle multiple consecutive flush calls with no changes between them', async () => {
+            let callCount = 0;
+            const capturedNotifications: Array<{ actions: ActionType[] }> = [];
+
+            store.subscribe((prevState, nextState, actions) => {
+                callCount++;
+                capturedNotifications.push({ actions: [...actions] });
+            });
+
+            // Create an action that makes some changes, flushes, then calls flush multiple times without changes
+            const multipleFlushAction = store['action']('MULTIPLE_FLUSH_ACTION', async function () {
+                // Make some initial changes
+                await store.increment({ amount: 3 });
+                await store.setText({ text: 'first change' });
+
+                // First flush - should work normally
+                store['flush']();
+
+                // Call flush multiple times with no changes between
+                store['flush'](); // Should be ignored (no actions to flush)
+                store['flush'](); // Should be ignored (no actions to flush)
+                store['flush'](); // Should be ignored (no actions to flush)
+
+                // Make one more change after multiple flushes
+                await store.increment({ amount: 2 });
+            });
+
+            await multipleFlushAction();
+
+            // Should get exactly 2 notifications:
+            // 1. From first flush with the batched changes
+            // 2. From final batch completion with the last increment
+            expect(callCount).to.equal(2);
+
+            // First notification should be from the first flush
+            expect(capturedNotifications[0]!.actions.length).to.equal(3); // MULTIPLE_FLUSH_ACTION, INCREMENT, SET_TEXT
+            expect(capturedNotifications[0]!.actions[0]!.type).to.equal('MULTIPLE_FLUSH_ACTION');
+            expect(capturedNotifications[0]!.actions[1]!.type).to.equal('INCREMENT');
+            expect(capturedNotifications[0]!.actions[2]!.type).to.equal('SET_TEXT');
+
+            // Second notification should be the final batch with FLUSH and INCREMENT
+            expect(capturedNotifications[1]!.actions.length).to.equal(2); // FLUSH, INCREMENT
+            expect(capturedNotifications[1]!.actions[0]!.type).to.equal('FLUSH');
+            expect(capturedNotifications[1]!.actions[1]!.type).to.equal('INCREMENT');
+
+            // Verify final state
+            expect(store.state.count).to.equal(5); // 0 + 3 + 2
+            expect(store.state.text).to.equal('first change');
+        });
+
+        it('should handle flush with state rollback on error', async () => {
+            const originalState = store.state;
+            let callCount = 0;
+
+            store.subscribe(() => callCount++);
+
+            // Add method to test store that flushes then errors
+            const flushThenErrorAction = store['action']('FLUSH_THEN_ERROR', async function () {
+                await store.increment({ amount: 5 });
+                store['flush'](); // This should notify subscribers
+                await store.increment({ amount: 3 });
+                throw new Error('Error after flush');
+            });
+
+            try {
+                await flushThenErrorAction();
+                expect.fail('Action should have thrown an error');
+            } catch (error) {
+                expect((error as Error).message).to.equal('Error after flush');
+            }
+
+            // State should be rolled back to original
+            expect(store.state).to.equal(originalState);
+
+            // Should have received one notification from the flush
+            expect(callCount).to.equal(1);
         });
     });
 });

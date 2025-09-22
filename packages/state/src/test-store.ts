@@ -7,7 +7,7 @@ export type TestStoreState = {
         value: number;
     };
 };
-// Test implementation of BaseStore
+
 export class TestStore extends BaseStore<TestStoreState> {
     static id = TestStore.uniqueId('TestStore', import.meta.url);
     constructor(initialState = { count: 0, text: 'hello', nested: { value: 1 } }) {
@@ -36,7 +36,7 @@ export class TestStore extends BaseStore<TestStoreState> {
     });
 
     throwError = this.action('THROW_ERROR', () => {
-        this.state = { ...this.state }; // to ensure state is "touched" and reverted
+        this.state = { ...this.state };
         throw new Error('Test error');
     });
 
@@ -77,4 +77,28 @@ export class TestStore extends BaseStore<TestStoreState> {
             await this.setNested({ value: nestedValue });
         },
     );
+
+    flushingAction = this.action<{ increment1: number; increment2: number; text: string }>(
+        'FLUSHING_ACTION',
+        async ({ increment1, increment2, text }) => {
+            await this.increment({ amount: increment1 });
+            await this.increment({ amount: increment2 });
+            this.flush();
+            await this.setText({ text });
+        },
+    );
+
+    doubleFlushAction = this.action<{ increment1: number; increment2: number }>(
+        'DOUBLE_FLUSH_ACTION',
+        async ({ increment1, increment2 }) => {
+            await this.increment({ amount: increment1 });
+            this.flush();
+            await this.increment({ amount: increment2 });
+            this.flush();
+        },
+    );
+
+    testFlush() {
+        this.flush();
+    }
 }

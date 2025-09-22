@@ -1,4 +1,7 @@
 export type ActionType = { type: string; payload: Record<string, unknown> | void };
+export type FlushActionPayload = {
+    flushedActionTypes: string[];
+};
 export type SubscriberCallback<T> = (
     prevState: DeepReadonly<T>,
     nextState: DeepReadonly<T>,
@@ -52,6 +55,7 @@ export abstract class BaseStore<T extends object> {
     private batchCount = 0;
     private batchedActions: ActionType[] | undefined = undefined;
     private initialState: DeepReadonly<T> | undefined = undefined;
+    private flushedState: DeepReadonly<T> | undefined = undefined;
     abortController: AbortController | undefined = undefined;
 
     constructor(state: T) {
@@ -124,11 +128,19 @@ export abstract class BaseStore<T extends object> {
                     if (batchError) {
                         this.state = this.initialState;
                     } else {
-                        this.notifySubscribers(this.initialState, this.state, this.batchedActions);
+                        const lastAction = this.batchedActions[this.batchedActions.length - 1];
+                        if (!lastAction || lastAction.type !== 'FLUSH') {
+                            this.notifySubscribers(
+                                this.flushedState || this.initialState,
+                                this.state,
+                                this.batchedActions,
+                            );
+                        }
                     }
                     this.abortController = undefined;
                     this.batchedActions = undefined;
                     this.initialState = undefined;
+                    this.flushedState = undefined;
                 }
             }
         };
@@ -145,6 +157,41 @@ export abstract class BaseStore<T extends object> {
     }
 
     /**
+     * Immediately flush the current batch, replacing all individual actions with a single FLUSH action for subsequent calls.
+     * This can only be called from within an action during a batch.
+     */
+    protected flush() {
+        if (this.batchCount === 0 || !this.batchedActions || !this.initialState) {
+            throw new Error('Cannot flush outside of an action batch');
+        }
+        const lastAction = this.batchedActions[this.batchedActions.length - 1];
+        if (lastAction?.type === 'FLUSH') {
+            return;
+        }
+
+        const flushAction = this.createFlushAction(this.batchedActions);
+
+        this.notifySubscribers(this.flushedState || this.initialState, this.state, this.batchedActions);
+
+        this.flushedState = this.state;
+        this.batchedActions = [flushAction];
+    }
+
+    /**
+     * Create a single FLUSH action that summarizes all batched actions
+     */
+    private createFlushAction(batchedActions: ActionType[]): ActionType {
+        const flushPayload: FlushActionPayload = {
+            flushedActionTypes: batchedActions.map((action) => action.type),
+        };
+
+        return {
+            type: 'FLUSH',
+            payload: flushPayload,
+        };
+    }
+
+    /**
      * Restore state from a history entry (used by History class)
      * This method allows controlled restoration of previous states
      * while properly notifying subscribers of the change.
@@ -153,7 +200,6 @@ export abstract class BaseStore<T extends object> {
         const prevState = this.state;
         this.state = newState;
 
-        // Create a HISTORY_RESTORE action to notify subscribers
         const restoreAction: ActionType = {
             type: 'HISTORY_RESTORE',
             payload: { timestamp: Date.now() },
@@ -164,7 +210,7 @@ export abstract class BaseStore<T extends object> {
 
     private notifySubscribers = (prevState: DeepReadonly<T>, nextState: DeepReadonly<T>, actions: ActionType[]) => {
         if (prevState === nextState) {
-            return; // No state change
+            return;
         }
         this.subscribers.forEach((sub) => {
             try {

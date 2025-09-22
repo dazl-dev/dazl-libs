@@ -220,6 +220,67 @@ class ProcessingStore extends BaseStore<{ processing: boolean; result: any }> {
 }
 ```
 
+### Manual Action Flushing
+
+The `flush()` method allows you to immediately notify subscribers with current state changes during a long-running action, rather than waiting for the entire action to complete. This is useful for providing intermediate updates in complex workflows:
+
+```typescript
+class DataProcessingStore extends BaseStore<{
+  items: any[];
+  processedCount: number;
+  status: string;
+}> {
+  static id = BaseStore.uniqueId('DataProcessingStore', import.meta.url);
+
+  constructor() {
+    super({ items: [], processedCount: 0, status: 'idle' });
+  }
+
+  processLargeDataset = this.action<{ dataset: any[] }>('PROCESS_DATASET', async ({ dataset }) => {
+    this.state = { ...this.state, status: 'processing', processedCount: 0 };
+
+    for (let i = 0; i < dataset.length; i++) {
+      // Process individual item
+      const processed = await this.processItem(dataset[i]);
+      this.state = {
+        ...this.state,
+        items: [...this.state.items, processed],
+        processedCount: i + 1,
+      };
+
+      // Flush every 100 items to update UI with progress
+      if ((i + 1) % 100 === 0) {
+        this.flush(); // Subscribers get notified with current progress
+      }
+    }
+
+    this.state = { ...this.state, status: 'completed' };
+    // Final notification happens automatically when action completes
+  });
+
+  private async processItem(item: any): Promise<any> {
+    // Simulate processing time
+    await new Promise((resolve) => setTimeout(resolve, 10));
+    return { ...item, processed: true };
+  }
+}
+```
+
+**Key flush characteristics:**
+
+- **Intermediate Notifications**: Subscribers receive state updates immediately instead of waiting for action completion
+- **Batch Consolidation**: All actions since the last flush (or action start) are replaced with a single `FLUSH` action in the notification
+- **Action Context Required**: `flush()` can only be called from within an action - calling it outside throws an error
+- **Automatic Prevention**: Multiple flush calls in the same batch are automatically deduplicated
+- **Payload Information**: The `FLUSH` action includes metadata about what was batched (action types, count, timestamp)
+
+This pattern is particularly useful for:
+
+- Long-running data processing with progress updates
+- Multi-step workflows where intermediate results should be visible
+- Real-time updates during batch operations
+- Providing responsive UIs during heavy computations
+
 ### Error Handling and Recovery
 
 When any action fails, **ALL state changes** made during that action are automatically rolled back:
@@ -371,6 +432,7 @@ Abstract base class for all stores providing type-safe state management.
 #### Protected Methods
 
 - `abort(): void` - Abort current action and rollback all state changes
+- `flush(): void` - Immediately flush current batch and notify subscribers (can only be called within an action)
 
 ### React Hooks
 
