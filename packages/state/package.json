@@ -1,0 +1,46 @@
+{
+  "name": "@dazl/state",
+  "version": "1.0.0",
+  "description": "Dazl state management utilities.",
+  "type": "module",
+  "exports": {
+    "./base-store": "./dist/base-store.js",
+    "./react-router": "./dist/react-router.js",
+    "./react-hook": "./dist/react-hook.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "src",
+    "!*/tsconfig.{json,tsbuildinfo}"
+  ],
+  "scripts": {
+    "test": "mocha src/**/*.test.ts"
+  },
+  "keywords": [
+    "dazl",
+    "react"
+  ],
+  "peerDependencies": {
+    "react": "^19.1.1",
+    "react-router": "^7.9.1"
+  },
+  "peerDependenciesMeta": {
+    "react-router": {
+      "optional": true
+    },
+    "react": {
+      "optional": true
+    }
+  },
+  "author": "Dazl",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dazl-dev/dazl-libs.git",
+    "directory": "packages/state"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
