@@ -1,0 +1,562 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>State Management Playground</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f5f5f5;
+      }
+
+      .container {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 20px;
+      }
+
+      .section {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .section h2 {
+        margin-top: 0;
+        color: #333;
+        border-bottom: 2px solid #007acc;
+        padding-bottom: 10px;
+      }
+
+      .controls {
+        margin: 10px 0;
+      }
+
+      .controls button {
+        background: #007acc;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        margin: 4px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+      }
+
+      .controls button:hover {
+        background: #005a9e;
+      }
+
+      .controls button:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+      }
+
+      .controls input,
+      .controls select {
+        padding: 6px;
+        margin: 4px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+
+      .state-display {
+        background: #f8f8f8;
+        padding: 15px;
+        border-radius: 4px;
+        border-left: 4px solid #007acc;
+        margin: 10px 0;
+        font-family: 'Courier New', monospace;
+        white-space: pre-wrap;
+      }
+
+      .history-list {
+        background: #f8f8f8;
+        padding: 15px;
+        border-radius: 4px;
+        max-height: 300px;
+        overflow-y: auto;
+        margin: 10px 0;
+      }
+
+      .history-entry {
+        padding: 8px;
+        border-bottom: 1px solid #ddd;
+        font-size: 12px;
+        font-family: 'Courier New', monospace;
+      }
+
+      .history-entry.current {
+        background: #e3f2fd;
+        font-weight: bold;
+      }
+
+      .history-entry.clickable {
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+
+      .history-entry.clickable:hover {
+        background: #f0f8ff;
+        border-left: 4px solid #007acc;
+      }
+
+      .actions-log {
+        background: #f0f0f0;
+        padding: 15px;
+        border-radius: 4px;
+        max-height: 200px;
+        overflow-y: auto;
+        margin: 10px 0;
+        font-family: 'Courier New', monospace;
+        font-size: 12px;
+      }
+
+      .log-entry {
+        margin: 2px 0;
+        padding: 2px;
+      }
+
+      .log-entry.action {
+        color: #0066cc;
+      }
+
+      .log-entry.error {
+        color: #cc0000;
+      }
+
+      .full-width {
+        grid-column: 1 / -1;
+      }
+
+      .span-2 {
+        grid-column: span 2;
+      }
+
+      .span-3 {
+        grid-column: span 3;
+      }
+
+      .span-4 {
+        grid-column: span 4;
+      }
+
+      .stats {
+        display: flex;
+        gap: 20px;
+        margin: 10px 0;
+        font-size: 14px;
+      }
+
+      .stat {
+        padding: 8px 12px;
+        background: #e3f2fd;
+        border-radius: 4px;
+        border-left: 4px solid #007acc;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>State Management Playground</h1>
+    <p>
+      Interactive playground for testing History and TestStore functionality. Open browser dev tools to see detailed
+      logs.
+    </p>
+
+    <div class="container">
+      <div class="section span-2">
+        <h2>TestStore Controls</h2>
+        <div class="controls">
+          <button id="increment">Increment (+1)</button>
+          <input type="number" id="incrementAmount" value="5" min="1" max="100" />
+          <button id="incrementCustom">Increment Custom</button>
+        </div>
+        <div class="controls">
+          <input type="text" id="textInput" value="Hello World" placeholder="Enter text" />
+          <button id="setText">Set Text</button>
+        </div>
+        <div class="controls">
+          <input type="number" id="nestedInput" value="42" min="0" max="1000" />
+          <button id="setNested">Set Nested Value</button>
+        </div>
+        <div class="controls">
+          <button id="asyncAction">Async Action</button>
+          <button id="throwError">Test Error</button>
+          <button id="reset">Reset Store</button>
+        </div>
+      </div>
+
+      <div class="section span-2">
+        <h2>History Controls</h2>
+        <div class="controls">
+          <button id="undo">Undo</button>
+          <button id="redo">Redo</button>
+          <button id="clear">Clear History</button>
+        </div>
+        <div class="controls">
+          <input type="text" id="labelInput" placeholder="Optional label" />
+          <button id="capture">Manual Capture</button>
+        </div>
+        <div class="controls">
+          <label>
+            <input type="checkbox" id="autoCapture" checked />
+            Auto Capture
+          </label>
+          <select id="historySize">
+            <option value="10">10 entries</option>
+            <option value="25">25 entries</option>
+            <option value="50" selected>50 entries</option>
+            <option value="100">100 entries</option>
+          </select>
+        </div>
+        <div class="stats">
+          <div class="stat"><strong>History Size:</strong> <span id="historyCount">0</span></div>
+          <div class="stat"><strong>Current Index:</strong> <span id="currentIndex">-1</span></div>
+          <div class="stat"><strong>Can Undo:</strong> <span id="canUndo">false</span></div>
+          <div class="stat"><strong>Can Redo:</strong> <span id="canRedo">false</span></div>
+        </div>
+      </div>
+
+      <div class="section span-3">
+        <h2>History Timeline</h2>
+        <div class="history-list" id="historyList">No history entries yet</div>
+      </div>
+
+      <div class="section">
+        <h2>Current State</h2>
+        <div class="state-display" id="currentState">Loading...</div>
+      </div>
+
+      <div class="section span-4">
+        <h2>Actions Log</h2>
+        <div class="actions-log" id="actionsLog">Playground initialized</div>
+        <button id="clearLog">Clear Log</button>
+      </div>
+    </div>
+
+    <script type="module">
+      // Import the modules from dist
+      let TestStore, History;
+
+      // Global state
+      let store;
+      let history;
+      let actionCounter = 0;
+
+      // Expose objects for console debugging
+      window.playground = {
+        store: () => store,
+        history: () => history,
+        log: log,
+        jumpToHistoryIndex: jumpToHistoryIndex,
+      };
+
+      try {
+        const testStoreModule = await import('./dist/test-store.js');
+        const historyModule = await import('./dist/history.js');
+        TestStore = testStoreModule.TestStore;
+        History = historyModule.History;
+      } catch (error) {
+        console.error('Failed to load modules:', error);
+        showBuildError(error);
+      }
+
+      // Initialize immediately after modules are loaded
+      // Check if DOM is already loaded
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+          init();
+          setupEventHandlers();
+        });
+      } else {
+        // DOM already loaded, initialize immediately
+        init();
+        setupEventHandlers();
+      }
+
+      function showBuildError(error) {
+        document.body.innerHTML = `
+                <div style="max-width: 800px; margin: 50px auto; padding: 40px; background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+                    <h1 style="color: #856404; margin-top: 0;">⚠️ Build Required</h1>
+                    <p style="font-size: 16px; color: #856404; margin: 20px 0;">
+                        The playground cannot load the required modules from the <code>dist/</code> folder.
+                    </p>
+                    <p style="font-size: 16px; color: #856404; margin: 20px 0;">
+                        Please run the following command from the root of the monorepo:
+                    </p>
+                    <div style="background: #000; color: #00ff00; padding: 15px; border-radius: 4px; font-family: 'Courier New', monospace; margin: 20px 0;">
+                        npm run build
+                    </div>
+                    <p style="font-size: 14px; color: #856404; margin: 20px 0;">
+                        This will compile the TypeScript source files into the JavaScript modules needed by the playground.
+                    </p>
+                    <details style="margin: 20px 0;">
+                        <summary style="cursor: pointer; color: #856404; font-weight: bold;">Technical Details</summary>
+                        <pre style="background: #f8f9fa; padding: 15px; border-radius: 4px; font-size: 12px; color: #495057; margin: 10px 0; overflow: auto;">${error.message}\n\n${error.stack}</pre>
+                    </details>
+                </div>
+            `;
+      }
+
+      // Initialize
+      function init() {
+        try {
+          store = new TestStore({ count: 0, text: 'Hello World', nested: { value: 42 } });
+          history = new History(store, {
+            maxHistorySize: 50,
+            autoCapture: true,
+          });
+
+          // Subscribe to store changes
+          store.subscribe((prevState, nextState, actions) => {
+            updateStateDisplay();
+            logActions(actions);
+            updateHistoryStats();
+            updateHistoryList();
+          });
+
+          // Initial render
+          updateStateDisplay();
+          updateHistoryStats();
+          updateHistoryList();
+
+          log('Playground initialized successfully', 'action');
+          console.log('Store:', store);
+          console.log('History:', history);
+        } catch (error) {
+          log(`Initialization error: ${error.message}`, 'error');
+          console.error('Initialization error:', error);
+        }
+      }
+
+      // Logging
+      function log(message, type = 'info') {
+        const logElement = document.getElementById('actionsLog');
+        const entry = document.createElement('div');
+        entry.className = `log-entry ${type}`;
+        entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+        logElement.appendChild(entry);
+        logElement.scrollTop = logElement.scrollHeight;
+      }
+
+      function logActions(actions) {
+        if (!Array.isArray(actions)) {
+          console.warn('logActions received non-array:', actions);
+          return;
+        }
+        actions.forEach((action) => {
+          actionCounter++;
+          log(
+            `Action #${actionCounter}: ${action.type} ${action.payload ? JSON.stringify(action.payload) : ''}`,
+            'action',
+          );
+        });
+      }
+
+      // UI Updates
+      function updateStateDisplay() {
+        const stateElement = document.getElementById('currentState');
+        stateElement.textContent = JSON.stringify(store.state, null, 2);
+      }
+
+      function updateHistoryStats() {
+        document.getElementById('historyCount').textContent = history.getHistory().length;
+        document.getElementById('currentIndex').textContent = history.currentIndex;
+        document.getElementById('canUndo').textContent = history.canUndo();
+        document.getElementById('canRedo').textContent = history.canRedo();
+
+        // Update button states
+        document.getElementById('undo').disabled = !history.canUndo();
+        document.getElementById('redo').disabled = !history.canRedo();
+      }
+
+      function updateHistoryList() {
+        const historyElement = document.getElementById('historyList');
+        const entries = history.getHistory();
+
+        if (entries.length === 0) {
+          historyElement.innerHTML = '<div class="history-entry">No history entries yet</div>';
+          return;
+        }
+
+        historyElement.innerHTML = entries
+          .map((entry, index) => {
+            const isCurrent = index === history.currentIndex;
+            const timestamp = new Date(entry.timestamp).toLocaleTimeString();
+            const actionsText = entry.actions
+              .map((a) => `${a.type}${a.payload ? `(${JSON.stringify(a.payload)})` : ''}`)
+              .join(', ');
+            const labelText = entry.label ? ` [${entry.label}]` : '';
+
+            return `
+                    <div class="history-entry ${isCurrent ? 'current' : 'clickable'}" data-index="${index}" onclick="playground.jumpToHistoryIndex(${index})">
+                        <strong>${index}:</strong> ${timestamp}${labelText}
+                        <br>Actions: ${actionsText || 'Initial state'}
+                        <br>State: ${JSON.stringify(entry.state)}
+                    </div>
+                `;
+          })
+          .join('');
+      }
+
+      function jumpToHistoryIndex(index) {
+        try {
+          if (history.jumpTo(index)) {
+            log(`Jumped to history index ${index}`, 'action');
+            // Updates will be triggered by store subscription
+          } else {
+            log(`Failed to jump to history index ${index} - invalid index`, 'error');
+          }
+        } catch (error) {
+          log(`Jump to history error: ${error.message}`, 'error');
+        }
+      }
+
+      // Event Handlers
+      function setupEventHandlers() {
+        // TestStore controls
+        document.getElementById('increment').onclick = () => {
+          try {
+            store.increment();
+          } catch (error) {
+            log(`Increment error: ${error.message}`, 'error');
+          }
+        };
+
+        document.getElementById('incrementCustom').onclick = () => {
+          try {
+            const amount = parseInt(document.getElementById('incrementAmount').value);
+            store.increment({ amount });
+          } catch (error) {
+            log(`Increment custom error: ${error.message}`, 'error');
+          }
+        };
+
+        document.getElementById('setText').onclick = () => {
+          try {
+            const text = document.getElementById('textInput').value;
+            store.setText({ text });
+          } catch (error) {
+            log(`Set text error: ${error.message}`, 'error');
+          }
+        };
+
+        document.getElementById('setNested').onclick = () => {
+          try {
+            const value = parseInt(document.getElementById('nestedInput').value);
+            store.setNested({ value });
+          } catch (error) {
+            log(`Set nested error: ${error.message}`, 'error');
+          }
+        };
+
+        document.getElementById('asyncAction').onclick = async () => {
+          try {
+            const newCount = Math.floor(Math.random() * 100);
+            log(`Starting async action with count: ${newCount}`, 'action');
+            await store.asyncAction({ newCount });
+            log('Async action completed', 'action');
+          } catch (error) {
+            log(`Async action error: ${error.message}`, 'error');
+          }
+        };
+
+        document.getElementById('throwError').onclick = () => {
+          try {
+            store.throwError();
+          } catch (error) {
+            log(`Expected error caught: ${error.message}`, 'error');
+          }
+        };
+
+        document.getElementById('reset').onclick = () => {
+          try {
+            history.clear();
+            updateHistoryStats();
+            log('Store reset to initial state', 'action');
+          } catch (error) {
+            log(`Reset error: ${error.message}`, 'error');
+          }
+        };
+
+        // History controls
+        document.getElementById('undo').onclick = () => {
+          try {
+            if (history.undo()) {
+              log('Undo successful', 'action');
+            } else {
+              log('Cannot undo - no previous state', 'info');
+            }
+          } catch (error) {
+            log(`Undo error: ${error.message}`, 'error');
+          }
+        };
+
+        document.getElementById('redo').onclick = () => {
+          try {
+            if (history.redo()) {
+              log('Redo successful', 'action');
+            } else {
+              log('Cannot redo - no next state', 'info');
+            }
+          } catch (error) {
+            log(`Redo error: ${error.message}`, 'error');
+          }
+        };
+
+        document.getElementById('clear').onclick = () => {
+          try {
+            history.clear();
+            log('History cleared and store reset', 'action');
+          } catch (error) {
+            log(`Clear error: ${error.message}`, 'error');
+          }
+        };
+
+        document.getElementById('capture').onclick = () => {
+          try {
+            const label = document.getElementById('labelInput').value.trim();
+            history.capture(label || undefined);
+            log(`Manual capture${label ? ` with label: ${label}` : ''}`, 'action');
+            document.getElementById('labelInput').value = '';
+          } catch (error) {
+            log(`Capture error: ${error.message}`, 'error');
+          }
+        };
+
+        document.getElementById('autoCapture').onchange = (e) => {
+          try {
+            const enabled = e.target.checked;
+            // Note: We'd need to recreate the history instance to change auto-capture
+            // For now, just log the change
+            log(`Auto-capture ${enabled ? 'enabled' : 'disabled'} (requires restart)`, 'info');
+          } catch (error) {
+            log(`Auto-capture toggle error: ${error.message}`, 'error');
+          }
+        };
+
+        document.getElementById('historySize').onchange = (e) => {
+          try {
+            const size = parseInt(e.target.value);
+            // Note: We'd need to recreate the history instance to change max size
+            // For now, just log the change
+            log(`History size changed to ${size} (requires restart)`, 'info');
+          } catch (error) {
+            log(`History size change error: ${error.message}`, 'error');
+          }
+        };
+
+        document.getElementById('clearLog').onclick = () => {
+          document.getElementById('actionsLog').innerHTML = '';
+          log('Log cleared', 'info');
+        };
+      }
+    </script>
+  </body>
+</html>
