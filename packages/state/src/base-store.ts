@@ -1,12 +1,15 @@
 export type ActionType = { type: string; payload: Record<string, unknown> | void };
+
 export type FlushActionPayload = {
     flushedActionTypes: string[];
 };
+
 export type SubscriberCallback<T> = (
     prevState: DeepReadonly<T>,
     nextState: DeepReadonly<T>,
     actions: ActionType[],
 ) => void;
+
 export type SubscriberFilter<T> = (
     prevState: DeepReadonly<T>,
     nextState: DeepReadonly<T>,
