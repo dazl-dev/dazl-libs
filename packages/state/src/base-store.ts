@@ -211,7 +211,7 @@ export abstract class BaseStore<T extends object> {
         this.notifySubscribers(prevState, newState, [restoreAction]);
     }
 
-    private notifySubscribers = (prevState: DeepReadonly<T>, nextState: DeepReadonly<T>, actions: ActionType[]) => {
+    protected notifySubscribers = (prevState: DeepReadonly<T>, nextState: DeepReadonly<T>, actions: ActionType[]) => {
         if (prevState === nextState) {
             return;
         }
