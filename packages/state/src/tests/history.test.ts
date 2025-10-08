@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import { BaseStore } from './base-store.ts';
-import { History } from './history.ts';
-import { TestStore, type TestStoreState } from './test-store.ts';
+import { BaseStore } from '../base-store.ts';
+import { History } from '../history.ts';
+import { TestStore, type TestStoreState } from '../test-store.ts';
 
 describe('History', () => {
     let store: TestStore;

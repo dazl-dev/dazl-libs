@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import { type ActionType } from './base-store.ts';
-import { TestStore } from './test-store.ts';
+import { type ActionType } from '../base-store.ts';
+import { TestStore } from '../test-store.ts';
 
 describe('BaseStore', () => {
     let store: TestStore;

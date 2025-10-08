@@ -249,14 +249,6 @@
       let history;
       let actionCounter = 0;
 
-      // Expose objects for console debugging
-      window.playground = {
-        store: () => store,
-        history: () => history,
-        log: log,
-        jumpToHistoryIndex: jumpToHistoryIndex,
-      };
-
       try {
         const testStoreModule = await import('./dist/test-store.js');
         const historyModule = await import('./dist/history.js');
@@ -395,7 +387,7 @@
             const labelText = entry.label ? ` [${entry.label}]` : '';
 
             return `
-                    <div class="history-entry ${isCurrent ? 'current' : 'clickable'}" data-index="${index}" onclick="playground.jumpToHistoryIndex(${index})">
+                    <div class="history-entry ${isCurrent ? 'current' : 'clickable'}" data-index="${index}">
                         <strong>${index}:</strong> ${timestamp}${labelText}
                         <br>Actions: ${actionsText || 'Initial state'}
                         <br>State: ${JSON.stringify(entry.state)}
@@ -555,6 +547,15 @@
         document.getElementById('clearLog').onclick = () => {
           document.getElementById('actionsLog').innerHTML = '';
           log('Log cleared', 'info');
+        };
+
+        // Event delegation for history entries
+        document.getElementById('historyList').onclick = (e) => {
+          const historyEntry = e.target.closest('.history-entry.clickable');
+          if (historyEntry) {
+            const index = parseInt(historyEntry.dataset.index, 10);
+            jumpToHistoryIndex(index);
+          }
         };
       }
     </script>
