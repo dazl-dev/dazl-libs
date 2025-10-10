@@ -13,13 +13,13 @@ export default defineConfig([
     pluginJs.configs.recommended,
     pluginReact.configs.flat.recommended,
     { settings: { react: { version: 'detect' } } },
-    { plugins: { 'react-hooks': pluginReactHooks, 'no-only-tests': pluginNoOnlyTests } },
+    pluginReactHooks.configs.flat.recommended,
+    { plugins: { 'no-only-tests': pluginNoOnlyTests } },
     {
         rules: {
             'no-only-tests/no-only-tests': 'error',
             'no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
             'react/prop-types': 'off',
-            'react-hooks/rules-of-hooks': 'error',
             'react-hooks/exhaustive-deps': 'error',
         },
     },

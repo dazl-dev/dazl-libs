@@ -11,6 +11,7 @@ export function useColorScheme() {
     });
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setScheme(api!.currentState);
         return api!.subscribe((currentState) => setScheme(currentState));
     }, []);
