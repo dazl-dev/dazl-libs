@@ -5,11 +5,11 @@ import configPrettier from 'eslint-config-prettier';
 import pluginNoOnlyTests from 'eslint-plugin-no-only-tests';
 import pluginReact from 'eslint-plugin-react';
 import pluginReactHooks from 'eslint-plugin-react-hooks';
-import { defineConfig } from 'eslint/config';
+import { defineConfig, globalIgnores } from 'eslint/config';
 import pluginTypescript from 'typescript-eslint';
 
 export default defineConfig([
-    { ignores: ['**/dist/', 'packages/color-scheme/playwright.config.ts'] },
+    globalIgnores(['**/dist/', 'packages/color-scheme/playwright.config.ts']),
     pluginJs.configs.recommended,
     pluginReact.configs.flat.recommended,
     { settings: { react: { version: 'detect' } } },
