@@ -27,7 +27,7 @@
     "@playwright/browser-chromium": "^1.56.0",
     "@playwright/test": "^1.56.0",
     "@types/chai": "^5.2.2",
-    "@types/node": "^24.7.2",
+    "@types/node": "^24.8.0",
     "@types/react": "^19.2.2",
     "chai": "^6.2.0",
     "eslint": "^9.37.0",
