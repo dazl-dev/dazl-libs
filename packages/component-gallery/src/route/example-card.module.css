@@ -1,0 +1,65 @@
+.card {
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  background-color: light-dark(#fff, #222);
+  overflow: auto;
+}
+
+.cardHeader {
+  margin-bottom: 16px;
+  font-weight: bold;
+  font-size: 12px;
+  color: light-dark(#666, #999);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.cardContent {
+  flex: 1;
+}
+
+.loadingState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 32px 32px 32px;
+}
+
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid light-dark(#eee, #444);
+  border-top-color: light-dark(#999, #888);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.errorState {
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+  color: light-dark(#ce2c31, #ec5d5e);
+}
+
+.errorIcon {
+  font-size: 32px;
+}
+
+.errorMessage {
+  border-radius: 4px;
+  overflow-wrap: break-word;
+  font-weight: 400;
+  font-size: 14px;
+}

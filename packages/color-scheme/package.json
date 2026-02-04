@@ -10,6 +10,7 @@
     "./package.json": "./package.json"
   },
   "scripts": {
+    "build": "tsc --build",
     "test": "playwright test --config=playwright.config.ts"
   },
   "keywords": [

@@ -9,6 +9,9 @@
     "./jsx-dev-runtime": "./dist/jsx-runtime.js",
     "./package.json": "./package.json"
   },
+  "scripts": {
+    "build": "tsc --build"
+  },
   "files": [
     "dist",
     "src",

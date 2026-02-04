@@ -12,6 +12,7 @@ export default defineConfig([
     globalIgnores(['**/dist/', 'packages/color-scheme/playwright.config.ts']),
     pluginJs.configs.recommended,
     pluginReact.configs.flat.recommended,
+    pluginReact.configs.flat['jsx-runtime'],
     { settings: { react: { version: 'detect' } } },
     pluginReactHooks.configs.flat.recommended,
     { plugins: { 'no-only-tests': pluginNoOnlyTests } },
