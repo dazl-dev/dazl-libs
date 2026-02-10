@@ -5,10 +5,15 @@
   "author": "Dazl",
   "license": "MIT",
   "type": "module",
-  "types": "./dist/index.d.ts",
   "exports": {
-    ".": "./dist/index.js",
-    "./route": "./dist/route/index.js",
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./route": {
+      "import": "./dist/route/index.js",
+      "types": "./dist/route/index.d.ts"
+    },
     "./package.json": "./package.json"
   },
   "files": [
