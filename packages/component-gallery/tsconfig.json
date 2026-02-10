@@ -4,7 +4,6 @@
     "module": "preserve",
     "moduleResolution": "bundler",
     "sourceMap": false,
-    "types": ["node"],
     "outDir": "./dist",
     "jsx": "react-jsx"
   },
