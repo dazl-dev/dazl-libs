@@ -20,7 +20,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "vite build"
+    "package": "vite build"
   },
   "publishConfig": {
     "access": "public"

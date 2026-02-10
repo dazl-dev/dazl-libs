@@ -8,7 +8,7 @@
     "pretest": "npm run lint && npm run build",
     "test": "npm run test --workspaces --if-present",
     "prebuild": "npm run clean",
-    "build": "tsc --build",
+    "build": "tsc --build && npm run package --workspaces --if-present",
     "lint": "eslint",
     "clean": "rimraf -g \"./packages/*/dist\"",
     "prettify": "prettier --write ."
