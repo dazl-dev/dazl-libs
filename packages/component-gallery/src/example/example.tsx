@@ -1,6 +1,6 @@
 import styles from './example.module.css';
 
-interface SectionProps {
+export interface SectionProps {
     title?: string;
     layout?: 'row' | 'column';
     children: React.ReactNode;
