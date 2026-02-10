@@ -22,7 +22,7 @@ export default defineConfig({
             formats: ['es'],
         },
         rollupOptions: {
-            external: ['react', 'react-dom', 'react/jsx-runtime', 'react-router', 'zod'],
+            external: ['react', 'react-dom', 'react/jsx-runtime', 'zod'],
             output: {
                 assetFileNames: 'assets/[name][extname]',
                 chunkFileNames: '[name].js',
