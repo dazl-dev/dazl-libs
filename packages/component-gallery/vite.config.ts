@@ -3,6 +3,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
     build: {
+        cssCodeSplit: false,
         lib: {
             entry: {
                 index: resolve(__dirname, 'src/index.ts'),
