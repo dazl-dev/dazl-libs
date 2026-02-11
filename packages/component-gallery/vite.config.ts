@@ -1,18 +1,9 @@
 import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
-import dts from 'vite-plugin-dts';
 import { libInjectCss } from 'vite-plugin-lib-inject-css';
 
 export default defineConfig({
-    plugins: [
-        libInjectCss(),
-        dts({
-            tsconfigPath: './tsconfig.json',
-            include: ['src/**/*.ts', 'src/**/*.tsx'],
-            exclude: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
-            entryRoot: 'src',
-        }),
-    ],
+    plugins: [libInjectCss()],
     build: {
         lib: {
             entry: {
