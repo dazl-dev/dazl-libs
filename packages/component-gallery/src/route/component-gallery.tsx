@@ -4,7 +4,7 @@ import { ExampleCard } from './example-card';
 import { useComponentGalleryParams } from './use-component-gallery-params';
 import { useScrollToExampleCard } from './use-scroll-to-example-card';
 
-export const ComponentGallery = () => {
+export default function ComponentGallery() {
     const { columns, examples, selectedExamplePath, random } = useComponentGalleryParams();
     const ref = useScrollToExampleCard(selectedExamplePath, random);
 
@@ -15,4 +15,4 @@ export const ComponentGallery = () => {
             ))}
         </div>
     );
-};
+}
