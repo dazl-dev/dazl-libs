@@ -12,7 +12,7 @@ export default defineConfig({
             formats: ['es'],
         },
         rollupOptions: {
-            external: ['react', 'react-dom', 'react/jsx-runtime', 'zod'],
+            external: (id) => /^[@a-z]/.test(id),
             output: {
                 assetFileNames: 'assets/[name][extname]',
                 chunkFileNames: '[name].js',
