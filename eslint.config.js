@@ -28,7 +28,15 @@ export default defineConfig([
         ...config,
         files: ['**/*.{ts,tsx,mts,cts}'],
     })),
-    { languageOptions: { parserOptions: { projectService: true } } },
+    {
+        languageOptions: {
+            parserOptions: {
+                projectService: {
+                    allowDefaultProject: ['packages/*/vite.config.ts'],
+                },
+            },
+        },
+    },
     {
         files: ['**/*.{ts,tsx,mts,cts}'],
         rules: {
