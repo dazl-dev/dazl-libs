@@ -3,6 +3,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
     build: {
+        emptyOutDir: false,
         cssCodeSplit: false,
         lib: {
             entry: {
