@@ -14,8 +14,7 @@ export default defineConfig({
         rollupOptions: {
             external: (id) => /^[@a-z]/.test(id),
             output: {
-                assetFileNames: 'assets/[name][extname]',
-                chunkFileNames: '[name].js',
+                assetFileNames: 'styles.css',
             },
         },
     },

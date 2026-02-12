@@ -14,6 +14,7 @@
       "import": "./dist/route/index.js",
       "types": "./dist/route/index.d.ts"
     },
+    "./styles.css": "./dist/styles.css",
     "./package.json": "./package.json"
   },
   "files": [

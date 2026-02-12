@@ -18,6 +18,7 @@ Create a development-only route in your React Router project:
 
 ```tsx
 // app/dev/components.tsx
+import '@dazl/component-gallery/styles.css';
 export { default } from '@dazl/component-gallery/route';
 export function clientLoader() {}
 export function HydrateFallback() {}
