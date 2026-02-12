@@ -1,0 +1,42 @@
+{
+  "name": "@dazl/component-gallery",
+  "version": "1.0.0",
+  "description": "View your components in a gallery inside Dazl",
+  "author": "Dazl",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./route": {
+      "import": "./dist/route/index.js",
+      "types": "./dist/route/index.d.ts"
+    },
+    "./styles.css": "./dist/styles.css",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "src",
+    "dist",
+    "!dist/tsconfig.tsbuildinfo"
+  ],
+  "scripts": {
+    "package": "vite build"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dazl-dev/dazl-libs.git",
+    "directory": "packages/component-gallery"
+  },
+  "dependencies": {
+    "zod": ">=4.0.0"
+  },
+  "peerDependencies": {
+    "react": ">=19.0.0"
+  }
+}

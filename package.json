@@ -8,7 +8,7 @@
     "pretest": "npm run lint && npm run build",
     "test": "npm run test --workspaces --if-present",
     "prebuild": "npm run clean",
-    "build": "tsc --build",
+    "build": "tsc --build && npm run package --workspaces --if-present",
     "lint": "eslint",
     "clean": "rimraf -g \"./packages/*/dist\"",
     "prettify": "prettier --write ."
@@ -40,6 +40,7 @@
     "react": "^19.2.4",
     "rimraf": "^6.1.2",
     "typescript": "~5.9.3",
-    "typescript-eslint": "^8.55.0"
+    "typescript-eslint": "^8.55.0",
+    "vite": "^6.0.11"
   }
 }

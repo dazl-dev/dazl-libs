@@ -1,5 +1,9 @@
 {
   "extends": "./tsconfig.base.json",
   "files": [],
-  "references": [{ "path": "./packages/color-scheme" }, { "path": "./packages/dev" }]
+  "references": [
+    { "path": "./packages/color-scheme" },
+    { "path": "./packages/component-gallery" },
+    { "path": "./packages/dev" }
+  ]
 }

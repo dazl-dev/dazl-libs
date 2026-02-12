@@ -12,6 +12,7 @@ export default defineConfig([
     globalIgnores(['**/dist/', 'packages/color-scheme/playwright.config.ts']),
     pluginJs.configs.recommended,
     pluginReact.configs.flat.recommended,
+    pluginReact.configs.flat['jsx-runtime'],
     { settings: { react: { version: 'detect' } } },
     pluginReactHooks.configs.flat.recommended,
     { plugins: { 'no-only-tests': pluginNoOnlyTests } },
@@ -27,7 +28,15 @@ export default defineConfig([
         ...config,
         files: ['**/*.{ts,tsx,mts,cts}'],
     })),
-    { languageOptions: { parserOptions: { projectService: true } } },
+    {
+        languageOptions: {
+            parserOptions: {
+                projectService: {
+                    allowDefaultProject: ['packages/*/vite.config.ts'],
+                },
+            },
+        },
+    },
     {
         files: ['**/*.{ts,tsx,mts,cts}'],
         rules: {
