@@ -41,6 +41,6 @@
     "rimraf": "^6.1.2",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.55.0",
-    "vite": "^6.0.11"
+    "vite": "^7.3.1"
   }
 }
