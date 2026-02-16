@@ -107,6 +107,7 @@ export function createBridge<TMessages extends Record<string, unknown>>(options?
     const pendingCalls = new Map<
         string,
         {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             resolve: (value: any) => void;
             reject: (error: Error) => void;
             timeoutId: ReturnType<typeof setTimeout>;
@@ -151,7 +152,11 @@ export function createBridge<TMessages extends Record<string, unknown>>(options?
          * @param timeout - Timeout in milliseconds (default: 5000)
          * @returns Promise that resolves with the response payload
          */
-        call<K extends keyof TMessages, R = any>(type: K, payload: TMessages[K], timeout: number = 5000): Promise<R> {
+        call<K extends keyof TMessages, R = unknown>(
+            type: K,
+            payload: TMessages[K],
+            timeout: number = 5000,
+        ): Promise<R> {
             return new Promise((resolve, reject) => {
                 const id = `${type as string}_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
 
