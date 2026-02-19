@@ -8,8 +8,7 @@
 
 .sectionTitle {
   margin-bottom: 16px;
-  font-weight: bold;
-  font-size: 12px;
+  font: bold 12px/1.5 system-ui;
   color: light-dark(#666, #999);
   text-transform: uppercase;
   letter-spacing: 0.05em;
