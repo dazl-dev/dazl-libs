@@ -7,37 +7,37 @@ interface ExampleCardProps {
     example: ComponentExampleInfo;
 }
 
-export const ExampleCard = memo(function ExampleCard({ example }: ExampleCardProps) {
+export const ExampleCard = memo(function Example({ example }: ExampleCardProps) {
     const [Component] = useState(() => lazy(() => import(/* @vite-ignore */ `/${example.relativePath}`)));
     const contentRef = useLinkBehaviorOverride();
 
     return (
-        <div id={example.relativePath} className={styles.card}>
-            <h3 className={styles.cardHeader}>{example.displayName}</h3>
-            <div ref={contentRef} className={styles.cardContent}>
-                <ErrorBoundary fallback={(error) => <ErrorState error={error} />}>
-                    <Suspense fallback={<LoadingState />}>
+        <div id={example.relativePath} className={styles.exampleCard}>
+            <h3 className={styles.exampleCardHeader}>{example.displayName}</h3>
+            <ErrorBoundary fallback={(error) => <ExampleCardError error={error} />}>
+                <Suspense fallback={<ExampleCardLoading />}>
+                    <div ref={contentRef} className={styles.exampleCardContent}>
                         <Component />
-                    </Suspense>
-                </ErrorBoundary>
-            </div>
+                    </div>
+                </Suspense>
+            </ErrorBoundary>
         </div>
     );
 });
 
-const LoadingState = () => {
+const ExampleCardLoading = () => {
     return (
-        <div className={styles.loadingState}>
-            <div className={styles.spinner} />
+        <div className={styles.exampleCardLoading}>
+            <div className={styles.exampleCardSpinner} />
         </div>
     );
 };
 
-const ErrorState = ({ error }: { error: Error }) => {
+const ExampleCardError = ({ error }: { error: Error }) => {
     return (
-        <div className={styles.errorState}>
-            <span className={styles.errorIcon}>⚠</span>
-            <span className={styles.errorMessage}>{error.message}</span>
+        <div className={styles.exampleCardError}>
+            <span className={styles.exampleCardErrorIcon}>⚠</span>
+            <span className={styles.exampleCardErrorMessage}>{error.message}</span>
         </div>
     );
 };

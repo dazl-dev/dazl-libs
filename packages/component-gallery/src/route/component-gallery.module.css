@@ -1,10 +1,17 @@
-.root {
+html,
+body {
+  overscroll-behavior: none;
+  background-color: light-dark(#f3f3f3, #151515);
+}
+
+.componentGallery {
   display: grid;
   gap: 16px;
   padding: 16px;
   grid-template-columns: repeat(var(--columns, 1), minmax(0, 1fr));
-}
 
-.root > * {
-  scroll-margin: 16px;
+  & > * {
+    /** Give extra space to example cards when scrolling programmatically. */
+    scroll-margin: 16px;
+  }
 }

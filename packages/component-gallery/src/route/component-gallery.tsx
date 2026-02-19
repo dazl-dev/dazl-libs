@@ -9,7 +9,7 @@ export default function ComponentGallery() {
     const ref = useScrollToExampleCard(selectedExamplePath, random);
 
     return (
-        <div ref={ref} className={styles.root} style={{ '--columns': columns } as CSSProperties}>
+        <div ref={ref} className={styles.componentGallery} style={{ '--columns': columns } as CSSProperties}>
             {examples.map((example) => (
                 <ExampleCard key={example.relativePath} example={example} />
             ))}

@@ -1,4 +1,4 @@
-.card {
+.exampleCard {
   border-radius: 8px;
   padding: 16px;
   display: flex;
@@ -7,59 +7,53 @@
   overflow: auto;
 }
 
-.cardHeader {
+.exampleCardHeader {
   margin-bottom: 16px;
-  font-weight: bold;
-  font-size: 12px;
+  font: bold 12px/1.5 system-ui;
   color: light-dark(#666, #999);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
-.cardContent {
-  flex: 1;
+.exampleCardContent {
 }
 
-.loadingState {
+.exampleCardLoading {
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0 32px 32px 32px;
 }
 
-.spinner {
+.exampleCardSpinner {
   width: 24px;
   height: 24px;
   border: 2px solid light-dark(#eee, #444);
   border-top-color: light-dark(#999, #888);
   border-radius: 50%;
-  animation: spin 1s linear infinite;
+  animation: exampleCardSpin 1s linear infinite;
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.errorState {
-  padding: 32px;
+.exampleCardError {
+  padding: 32px 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   gap: 8px;
   text-align: center;
   color: light-dark(#ce2c31, #ec5d5e);
 }
 
-.errorIcon {
-  font-size: 32px;
+.exampleCardErrorIcon {
+  font: 32px/1.5 system-ui;
 }
 
-.errorMessage {
-  border-radius: 4px;
+.exampleCardErrorMessage {
+  font: 14px/1.5 system-ui;
   overflow-wrap: break-word;
-  font-weight: 400;
-  font-size: 14px;
+}
+
+@keyframes exampleCardSpin {
+  to {
+    transform: rotate(360deg);
+  }
 }
