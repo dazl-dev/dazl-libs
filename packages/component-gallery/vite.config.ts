@@ -7,6 +7,8 @@ export default defineConfig({
         emptyOutDir: false,
         // Emit a single, predictable CSS file.
         cssCodeSplit: false,
+        // Don't minify component names so they appear nicely in Dazl.
+        minify: false,
         lib: {
             entry: {
                 index: resolve(__dirname, 'src/index.ts'),
@@ -20,6 +22,13 @@ export default defineConfig({
             output: {
                 assetFileNames: 'styles.css',
             },
+        },
+    },
+    css: {
+        modules: {
+            // Don't mangle CSS class names so they appear nicely in Dazl.
+            // This requires all names to be manually namespaced or scoped.
+            generateScopedName: '[local]',
         },
     },
 });
