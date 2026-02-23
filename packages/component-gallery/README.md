@@ -65,13 +65,15 @@ import { Button } from './button';
 export default function ButtonExample() {
   return (
     <>
-      <Section title="Sizes" layout="row">
+      <Section layout="row">
+        <Section.Title>Sizes</Section.Title>
         <Button size="sm">Small</Button>
         <Button size="md">Medium</Button>
         <Button size="lg">Large</Button>
       </Section>
 
-      <Section title="States" layout="column">
+      <Section layout="column">
+        <Section.Title>States</Section.Title>
         <Button disabled>Disabled</Button>
         <Button loading>Loading</Button>
       </Section>
