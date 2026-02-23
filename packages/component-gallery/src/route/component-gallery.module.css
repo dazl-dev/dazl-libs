@@ -1,6 +1,9 @@
 html,
 body {
   overscroll-behavior: none;
+  /* Disable native scroll anchoring, which triggers scroll events that the
+     component gallery erroneously detects as manual scrolling. */
+  overflow-anchor: none;
   background-color: light-dark(#f3f3f3, #151515);
 }
 
