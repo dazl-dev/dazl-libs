@@ -29,6 +29,7 @@ export default defineConfig([
                 projectService: {
                     allowDefaultProject: ['packages/*/vite.config.ts'],
                 },
+                warnOnUnsupportedTypeScriptVersion: false,
             },
         },
     },
