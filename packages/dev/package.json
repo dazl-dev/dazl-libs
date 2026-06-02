@@ -7,6 +7,7 @@
     ".": "./dist/jsx-runtime.js",
     "./jsx-runtime": "./dist/jsx-runtime.js",
     "./jsx-dev-runtime": "./dist/jsx-runtime.js",
+    "./plugins": "./dist/plugins/index.js",
     "./package.json": "./package.json"
   },
   "files": [
