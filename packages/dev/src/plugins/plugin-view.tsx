@@ -1,12 +1,12 @@
-// Route-module primitives (clientLoader, HydrateFallback) plus <PluginView />,
-// which renders the matched plugin view. The host wires these into its router
-// and spreads the loader result into PluginView.
+// dazl-dev plugin views. Router-agnostic: resolveView() takes a URL and returns
+// a ready-to-render element for the matched view. The host wires it into its own
+// router (e.g. a react-router clientLoader) and renders the result directly;
 //
 // A view module default-exports a PluginViewDefinition (from definePluginView):
 // a component plus an optional `load` for initial data. Both receive a PluginApi
 // bound to the plugin, so plugin code calls its own api routes explicitly.
 
-import { createElement, useMemo, type ComponentType } from 'react';
+import { createElement, type ComponentType, type ReactElement } from 'react';
 import { loadPluginView } from './load-plugin-view.ts';
 import { INDEX_ROUTE, parseDevRoutePath } from './url.ts';
 
@@ -18,8 +18,6 @@ export type PluginApi = {
 };
 
 export type PluginLoadArgs = {
-    params: Readonly<Record<string, string | undefined>>;
-    request: Request;
     // /dazl-dev/<pluginId>, no trailing slash.
     pluginBaseUrl: string;
     api: PluginApi;
@@ -60,10 +58,11 @@ function createPluginApi(pluginBaseUrl: string): PluginApi {
     };
 }
 
-async function loadEntry(
-    params: PluginLoadArgs['params'],
-): Promise<{ pluginId: string; def: PluginViewDefinition<unknown> }> {
-    const parsed = parseDevRoutePath(params['*'] ?? '');
+// Router-agnostic entry point: takes the request URL (or path), resolves the
+// matched plugin view, runs its `load`, and returns a bound, ready-to-render
+// element. The host renders the returned element directly.
+export async function resolveView(url: string): Promise<ReactElement> {
+    const parsed = parseDevRoutePath(url);
     if (!parsed) throw new Error('No plugin id in URL');
     const mod = await loadPluginView(parsed.pluginId, parsed.pluginRoute);
     if (!mod || !mod.default) {
@@ -76,37 +75,10 @@ async function loadEntry(
         def.component.displayName =
             parsed.pluginRoute === INDEX_ROUTE ? parsed.pluginId : `${parsed.pluginId}/${parsed.pluginRoute}`;
     }
-    return { pluginId: parsed.pluginId, def };
-}
-
-// Browser-only, so views work whether or not the host renders on the server.
-export async function clientLoader({ params, request }: { params: PluginLoadArgs['params']; request: Request }) {
-    const { pluginId, def } = await loadEntry(params);
-    const pluginBaseUrl = `/dazl-dev/${pluginId}`;
+    const pluginBaseUrl = `/dazl-dev/${parsed.pluginId}`;
     const api = createPluginApi(pluginBaseUrl);
-    const data = def.load ? await def.load({ params, request, pluginBaseUrl, api }) : null;
-    return { Component: def.component, data, pluginBaseUrl };
-}
-
-// Shown while the matched view module loads.
-export function HydrateFallback() {
-    return <div></div>;
-}
-HydrateFallback.displayName = '__dazl_HydrateFallback';
-
-// What clientLoader returns; the host spreads it into <PluginView />.
-export type PluginViewProps = {
-    Component: ComponentType<PluginViewComponentProps<unknown>>;
-    data: unknown;
-    pluginBaseUrl: string;
-};
-
-export function PluginView({ Component, data, pluginBaseUrl }: PluginViewProps) {
-    // Stable identity per pluginBaseUrl so plugins can safely use `api` in
-    // useEffect/useCallback deps without it churning across re-renders.
-    const api = useMemo(() => createPluginApi(pluginBaseUrl), [pluginBaseUrl]);
+    const data = def.load ? await def.load({ pluginBaseUrl, api }) : null;
     // Direct createElement (not JSX) so the fiber gets no __source back to this
     // file - "go to code" lands on the user's component, not this wrapper.
-    return createElement(Component, { data, pluginBaseUrl, api });
+    return createElement(def.component, { data, pluginBaseUrl, api });
 }
-PluginView.displayName = 'PluginView';
