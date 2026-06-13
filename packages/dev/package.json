@@ -7,7 +7,16 @@
     ".": "./dist/jsx-runtime.js",
     "./jsx-runtime": "./dist/jsx-runtime.js",
     "./jsx-dev-runtime": "./dist/jsx-runtime.js",
+    "./plugins": "./dist/plugins/index.js",
     "./package.json": "./package.json"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
   },
   "files": [
     "dist",
