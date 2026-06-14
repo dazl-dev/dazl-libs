@@ -7,7 +7,16 @@
     ".": "./dist/jsx-runtime.js",
     "./jsx-runtime": "./dist/jsx-runtime.js",
     "./jsx-dev-runtime": "./dist/jsx-runtime.js",
+    "./dazl-vite-plugin": "./dist/dazl-vite-plugin.js",
     "./package.json": "./package.json"
+  },
+  "peerDependencies": {
+    "vite": ">=7.0.0"
+  },
+  "peerDependenciesMeta": {
+    "vite": {
+      "optional": true
+    }
   },
   "files": [
     "dist",
