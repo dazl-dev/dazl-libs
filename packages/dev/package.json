@@ -3,7 +3,13 @@
   "version": "1.5.0",
   "description": "Dazl development time utilities.",
   "type": "module",
-  "main": "./dist/jsx-runtime.js",
+  "exports": {
+    ".": "./dist/jsx-runtime.js",
+    "./jsx-runtime": "./dist/jsx-runtime.js",
+    "./jsx-dev-runtime": "./dist/jsx-runtime.js",
+    "./dazl-vite-plugin": "./dist/dazl-vite-plugin.js",
+    "./package.json": "./package.json"
+  },
   "types": "./dist/jsx-runtime.d.ts",
   "typesVersions": {
     "*": {
@@ -11,13 +17,6 @@
       "jsx-dev-runtime": ["./dist/jsx-runtime.d.ts"],
       "dazl-vite-plugin": ["./dist/dazl-vite-plugin.d.ts"]
     }
-  },
-  "exports": {
-    ".": "./dist/jsx-runtime.js",
-    "./jsx-runtime": "./dist/jsx-runtime.js",
-    "./jsx-dev-runtime": "./dist/jsx-runtime.js",
-    "./dazl-vite-plugin": "./dist/dazl-vite-plugin.js",
-    "./package.json": "./package.json"
   },
   "peerDependencies": {
     "vite": ">=7.0.0"
