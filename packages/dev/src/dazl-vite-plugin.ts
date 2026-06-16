@@ -17,7 +17,8 @@ export async function dazlVitePlugin(): Promise<PluginOption> {
         return false;
     }
 
-    const { default: dazlPlugins } = (await import(pathToFileURL(pluginPath).href)) as { default: DazlPlugins };
+    const pluginUrl = pluginPath.startsWith('file:') ? pluginPath : pathToFileURL(pluginPath).href;
+    const { default: dazlPlugins } = (await import(pluginUrl)) as { default: DazlPlugins };
 
     return dazlPlugins({ viteVersion, previewScriptUrl });
 }
