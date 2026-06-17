@@ -10,6 +10,14 @@
     "./dazl-vite-plugin": "./dist/dazl-vite-plugin.js",
     "./package.json": "./package.json"
   },
+  "types": "./dist/jsx-runtime.d.ts",
+  "typesVersions": {
+    "*": {
+      "jsx-runtime": ["./dist/jsx-runtime.d.ts"],
+      "jsx-dev-runtime": ["./dist/jsx-runtime.d.ts"],
+      "dazl-vite-plugin": ["./dist/dazl-vite-plugin.d.ts"]
+    }
+  },
   "peerDependencies": {
     "vite": ">=7.0.0"
   },
