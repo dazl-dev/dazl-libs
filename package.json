@@ -25,7 +25,7 @@
   "license": "MIT",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@playwright/browser-chromium": "^1.61.0",
+    "@playwright/browser-chromium": "^1.61.1",
     "@playwright/test": "^1.61.0",
     "@types/chai": "^5.2.3",
     "@types/node": "24",
