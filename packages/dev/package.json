@@ -13,9 +13,15 @@
   "types": "./dist/jsx-runtime.d.ts",
   "typesVersions": {
     "*": {
-      "jsx-runtime": ["./dist/jsx-runtime.d.ts"],
-      "jsx-dev-runtime": ["./dist/jsx-runtime.d.ts"],
-      "dazl-vite-plugin": ["./dist/dazl-vite-plugin.d.ts"]
+      "jsx-runtime": [
+        "./dist/jsx-runtime.d.ts"
+      ],
+      "jsx-dev-runtime": [
+        "./dist/jsx-runtime.d.ts"
+      ],
+      "dazl-vite-plugin": [
+        "./dist/dazl-vite-plugin.d.ts"
+      ]
     }
   },
   "peerDependencies": {
