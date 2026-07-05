@@ -7,6 +7,7 @@
     ".": "./dist/jsx-runtime.js",
     "./jsx-runtime": "./dist/jsx-runtime.js",
     "./jsx-dev-runtime": "./dist/jsx-runtime.js",
+    "./dazl-rsbuild-plugin": "./dist/dazl-rsbuild-plugin.js",
     "./dazl-vite-plugin": "./dist/dazl-vite-plugin.js",
     "./package.json": "./package.json"
   },
@@ -19,15 +20,22 @@
       "jsx-dev-runtime": [
         "./dist/jsx-runtime.d.ts"
       ],
+      "dazl-rsbuild-plugin": [
+        "./dist/dazl-rsbuild-plugin.d.ts"
+      ],
       "dazl-vite-plugin": [
         "./dist/dazl-vite-plugin.d.ts"
       ]
     }
   },
   "peerDependencies": {
+    "@rsbuild/core": ">=2.0.0",
     "vite": ">=7.0.0"
   },
   "peerDependenciesMeta": {
+    "@rsbuild/core": {
+      "optional": true
+    },
     "vite": {
       "optional": true
     }
