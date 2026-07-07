@@ -1,6 +1,8 @@
 import * as ReactDevRuntime from 'react/jsx-dev-runtime';
+import * as React from 'react';
 
 const isBrowser = typeof window !== 'undefined';
+const isServerComponent = !React.Component;
 const isObjectLike = (value: unknown) => typeof value === 'object' && value !== null;
 
 const generateKeyFromJSXSource = (source: ReactDevRuntime.JSXSource) => {
@@ -38,6 +40,33 @@ const jsxDEVKeepSource: typeof ReactDevRuntime.jsxDEV = (type, props, key, isSta
     return reactElement;
 };
 
+const jsxDEVServerComponents: typeof ReactDevRuntime.jsxDEV = (type, props, key, isStatic, source, self) => {
+    const isFragmentWithSource = type === ReactDevRuntime.Fragment && source;
+    if (isFragmentWithSource) {
+        // we add a key on fragment so it will always have a fiber.
+        // with current react version (19) they don't have a fiber if there is no key and they are an only child.
+        // to test if it is still needed add a component returning a fragment and see if the fragment has fiber
+        key = key === undefined ? generateKeyFromJSXSource(source) : key;
+        if (isObjectLike(props) && 'children' in props) {
+            // make fragment children always an array, so we can use fragment fiber props as a key in WeakMaps. (for fragments the props is the children on the fiber)
+            // for example we have a props to fiber map and a props to src location map
+            if (!Array.isArray(props.children)) {
+                props = { ...props, children: [props.children] };
+                // tell react that this is a static children array. to avoid warning about a missing key.
+                // it seems that keys validation is the only thing that the "isStatic" flag is used for.
+                isStatic = true;
+            }
+        }
+    }
+
+    if (source && isObjectLike(props)) {
+        (props as { __source?: typeof source }).__source = source;
+    }
+    const reactElement = ReactDevRuntime.jsxDEV(type, props, key, isStatic, source, self);
+
+    return reactElement;
+};
+
 // set on window for later inspection
 if (isBrowser) {
     window.__propsToSource = propsToSource;
@@ -51,4 +80,8 @@ declare global {
 
 export { Fragment, jsx, jsxs, type JSX } from 'react/jsx-runtime';
 export { createElement } from 'react';
-export const jsxDEV: typeof ReactDevRuntime.jsxDEV = isBrowser ? jsxDEVKeepSource : ReactDevRuntime.jsxDEV;
+export const jsxDEV: typeof ReactDevRuntime.jsxDEV = isBrowser
+    ? jsxDEVKeepSource
+    : isServerComponent
+      ? jsxDEVServerComponents
+      : ReactDevRuntime.jsxDEV;
