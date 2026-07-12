@@ -70,7 +70,8 @@ export function dazlPostcssPlugin(): DazlPostcssPlugin {
         postcssPlugin: 'dazl-postcss-plugin-loader',
         async Once(root: Root, helpers: Helpers) {
             pluginPromise ||= resolveDazlPostcssPlugin();
-            await runDazlPostcssPlugin(root, helpers, await pluginPromise);
+            const plugin = await pluginPromise;
+            await runDazlPostcssPlugin(root, helpers, plugin);
         },
     };
 }
