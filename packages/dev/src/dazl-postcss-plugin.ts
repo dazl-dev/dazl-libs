@@ -13,21 +13,39 @@ function isDazlPostcssPluginFactory(value: DazlPostcssPluginValue): value is Daz
     return typeof value === 'function';
 }
 
-async function loadDazlPostcssPlugin(options: Required<DazlPostcssPluginOptions>): Promise<DazlPostcssPlugin> {
-    const module = (await import(options.pluginSpecifier)) as DazlPostcssPluginModule;
+/**
+ * Resolves the configured plugin specifier and imports the actual CSS transformer.
+ *
+ * This is the shared resolve-and-import path used by both the ESM loader (below)
+ * and the CJS loader. Returning the real transformer directly avoids nesting an
+ * extra loader plugin (and an extra postcss `.process()` pass) on the CJS path.
+ *
+ * Returns undefined when no plugin specifier is available.
+ */
+export async function resolveDazlPostcssPlugin(
+    options: DazlPostcssPluginOptions = {},
+): Promise<DazlPostcssPlugin | undefined> {
+    const pluginSpecifier = options.pluginSpecifier || process.env.DAZL_POSTCSS_PLUGIN_SPECIFIER;
+    if (!pluginSpecifier) {
+        return undefined;
+    }
+
+    const previewScriptUrl = options.previewScriptUrl || process.env.DAZL_PREVIEW_SCRIPT_URL || '';
+
+    const module = (await import(pluginSpecifier)) as DazlPostcssPluginModule;
 
     const pluginOrFactory =
         module.dazlPostcssPlugin || module.dazlPostCSSPlugin || module.postcssPlugin || module.cssTransformer;
 
     if (!pluginOrFactory) {
         throw new Error(
-            `Module "${options.pluginSpecifier}" does not expose a CSS transformer for PostCSS. ` +
+            `Module "${pluginSpecifier}" does not expose a CSS transformer for PostCSS. ` +
                 'Expected one of: dazlPostcssPlugin, dazlPostCSSPlugin, postcssPlugin, cssTransformer.',
         );
     }
 
     if (isDazlPostcssPluginFactory(pluginOrFactory)) {
-        return pluginOrFactory({ previewScriptUrl: options.previewScriptUrl });
+        return pluginOrFactory({ previewScriptUrl });
     }
 
     return pluginOrFactory;
@@ -51,18 +69,17 @@ export function dazlPostcssPlugin(options: DazlPostcssPluginOptions = {}): DazlP
         return undefined;
     }
 
-    const previewScriptUrl = options.previewScriptUrl || process.env.DAZL_PREVIEW_SCRIPT_URL;
-    const resolvedOptions: Required<DazlPostcssPluginOptions> = {
-        pluginSpecifier,
-        previewScriptUrl: previewScriptUrl || '',
-    };
-    let pluginPromise: Promise<DazlPostcssPlugin> | undefined;
+    let pluginPromise: Promise<DazlPostcssPlugin | undefined> | undefined;
 
     return {
         postcssPlugin: 'dazl-postcss-plugin-loader',
         async Once(root: Root, helpers: Helpers) {
-            pluginPromise ||= loadDazlPostcssPlugin(resolvedOptions);
-            await runDazlPostcssPlugin(root, helpers, await pluginPromise);
+            pluginPromise ||= resolveDazlPostcssPlugin(options);
+            const plugin = await pluginPromise;
+            if (!plugin) {
+                return;
+            }
+            await runDazlPostcssPlugin(root, helpers, plugin);
         },
     };
 }

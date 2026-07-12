@@ -21,8 +21,8 @@ const dazlPostcssPlugin: DazlPostcssPluginLoader = Object.assign(
         return {
             postcssPlugin: 'dazl-postcss-plugin-cjs-loader',
             async Once(root: Root, helpers: Helpers) {
-                pluginPromise ||= import('@dazl/dev/dazl-postcss-plugin').then(({ dazlPostcssPlugin: loadPlugin }) => {
-                    return loadPlugin(options);
+                pluginPromise ||= import('@dazl/dev/dazl-postcss-plugin').then(({ resolveDazlPostcssPlugin }) => {
+                    return resolveDazlPostcssPlugin(options);
                 });
 
                 const plugin = await pluginPromise;
