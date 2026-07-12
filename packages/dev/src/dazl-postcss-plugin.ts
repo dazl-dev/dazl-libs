@@ -30,8 +30,6 @@ export async function resolveDazlPostcssPlugin(
         return undefined;
     }
 
-    const previewScriptUrl = options.previewScriptUrl || process.env.DAZL_PREVIEW_SCRIPT_URL || '';
-
     const module = (await import(pluginSpecifier)) as DazlPostcssPluginModule;
 
     const pluginOrFactory =
@@ -45,7 +43,7 @@ export async function resolveDazlPostcssPlugin(
     }
 
     if (isDazlPostcssPluginFactory(pluginOrFactory)) {
-        return pluginOrFactory({ previewScriptUrl });
+        return pluginOrFactory({});
     }
 
     return pluginOrFactory;
