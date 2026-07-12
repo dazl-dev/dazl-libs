@@ -12,7 +12,7 @@ export type DazlVitePluginFactory<TPluginOption = unknown> = (
 
 export type DazlPostcssPlugin = AcceptedPlugin;
 
-export type DazlPostcssPluginFactory = (options: { previewScriptUrl?: string }) => DazlPostcssPlugin;
+export type DazlPostcssPluginFactory = () => DazlPostcssPlugin;
 export type DazlPostcssPluginValue = DazlPostcssPlugin | DazlPostcssPluginFactory;
 
 export interface DazlPostcssPluginModule {
