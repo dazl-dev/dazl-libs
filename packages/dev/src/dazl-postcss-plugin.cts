@@ -1,7 +1,7 @@
 import type { AcceptedPlugin, Helpers, Root } from 'postcss';
 import type { DazlPostcssPluginOptions } from './dazl-plugin-types.js';
 
-type DazlPostcssPluginLoader = ((options?: DazlPostcssPluginOptions) => AcceptedPlugin | undefined) & {
+type DazlPostcssPluginLoader = ((options?: DazlPostcssPluginOptions) => AcceptedPlugin) & {
     postcss: true;
 };
 
@@ -16,7 +16,7 @@ function runPlugin(root: Root, helpers: Helpers, plugin: AcceptedPlugin): Promis
 
 const dazlPostcssPlugin: DazlPostcssPluginLoader = Object.assign(
     function dazlPostcssPlugin(options?: DazlPostcssPluginOptions): AcceptedPlugin {
-        let pluginPromise: Promise<AcceptedPlugin | undefined> | undefined;
+        let pluginPromise: Promise<AcceptedPlugin> | undefined;
 
         return {
             postcssPlugin: 'dazl-postcss-plugin-cjs-loader',
@@ -25,11 +25,7 @@ const dazlPostcssPlugin: DazlPostcssPluginLoader = Object.assign(
                     return resolveDazlPostcssPlugin(options);
                 });
 
-                const plugin = await pluginPromise;
-                if (!plugin) {
-                    return;
-                }
-                await runPlugin(root, helpers, plugin);
+                await runPlugin(root, helpers, await pluginPromise);
             },
         };
     },

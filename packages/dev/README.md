@@ -17,7 +17,17 @@ import { dazlPostcssPlugin } from '@dazl/dev/dazl-postcss-plugin';
 const plugin = dazlPostcssPlugin();
 
 export default {
-  plugins: [plugin].filter(Boolean),
+  plugins: [plugin],
+};
+```
+
+Or reference it by module specifier in a `postcss.config.js`:
+
+```js
+module.exports = {
+  plugins: {
+    '@dazl/dev/dazl-postcss-plugin': {},
+  },
 };
 ```
 
