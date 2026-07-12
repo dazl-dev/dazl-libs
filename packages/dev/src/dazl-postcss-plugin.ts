@@ -3,11 +3,8 @@ import type {
     DazlPostcssPlugin,
     DazlPostcssPluginFactory,
     DazlPostcssPluginModule,
-    DazlPostcssPluginOptions,
     DazlPostcssPluginValue,
 } from './dazl-plugin-types.js';
-
-export type { DazlPostcssPluginOptions } from './dazl-plugin-types.js';
 
 function isDazlPostcssPluginFactory(value: DazlPostcssPluginValue): value is DazlPostcssPluginFactory {
     return typeof value === 'function';
@@ -32,8 +29,8 @@ const noopDazlPostcssPlugin: DazlPostcssPlugin = {
  *
  * Returns a no-op plugin when no plugin specifier is available.
  */
-export async function resolveDazlPostcssPlugin(options: DazlPostcssPluginOptions = {}): Promise<DazlPostcssPlugin> {
-    const pluginSpecifier = options.pluginSpecifier || process.env.DAZL_POSTCSS_PLUGIN_SPECIFIER;
+export async function resolveDazlPostcssPlugin(): Promise<DazlPostcssPlugin> {
+    const pluginSpecifier = process.env.DAZL_POSTCSS_PLUGIN_SPECIFIER;
     if (!pluginSpecifier) {
         return noopDazlPostcssPlugin;
     }
@@ -43,10 +40,7 @@ export async function resolveDazlPostcssPlugin(options: DazlPostcssPluginOptions
     const pluginOrFactory = module.dazlPostcssPlugin;
 
     if (!pluginOrFactory) {
-        throw new Error(
-            `Module "${pluginSpecifier}" does not expose a CSS transformer for PostCSS. ` +
-                'Expected one of: dazlPostcssPlugin, dazlPostCSSPlugin, postcssPlugin, cssTransformer.',
-        );
+        throw new Error(`Module "${pluginSpecifier}" does not expose a CSS transformer for PostCSS. ` + 'Expected ');
     }
 
     if (isDazlPostcssPluginFactory(pluginOrFactory)) {
@@ -69,13 +63,13 @@ async function runDazlPostcssPlugin(root: Root, helpers: Helpers, plugin: DazlPo
  * be used in configs that do not support async plugin registration; only the
  * transformation path is async.
  */
-export function dazlPostcssPlugin(options: DazlPostcssPluginOptions = {}): DazlPostcssPlugin {
+export function dazlPostcssPlugin(): DazlPostcssPlugin {
     let pluginPromise: Promise<DazlPostcssPlugin> | undefined;
 
     return {
         postcssPlugin: 'dazl-postcss-plugin-loader',
         async Once(root: Root, helpers: Helpers) {
-            pluginPromise ||= resolveDazlPostcssPlugin(options);
+            pluginPromise ||= resolveDazlPostcssPlugin();
             await runDazlPostcssPlugin(root, helpers, await pluginPromise);
         },
     };

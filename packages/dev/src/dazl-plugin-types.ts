@@ -1,12 +1,9 @@
 import type { AcceptedPlugin } from 'postcss';
 
-export interface DazlPluginLoaderOptions {
+export interface DazlVitePluginOptions {
+    viteVersion?: string;
     pluginSpecifier?: string;
     previewScriptUrl?: string;
-}
-
-export interface DazlVitePluginOptions extends DazlPluginLoaderOptions {
-    viteVersion?: string;
 }
 
 export type DazlVitePluginFactory<TPluginOption = unknown> = (
@@ -20,9 +17,4 @@ export type DazlPostcssPluginValue = DazlPostcssPlugin | DazlPostcssPluginFactor
 
 export interface DazlPostcssPluginModule {
     dazlPostcssPlugin?: DazlPostcssPluginValue;
-    dazlPostCSSPlugin?: DazlPostcssPluginValue;
-    postcssPlugin?: DazlPostcssPluginValue;
-    cssTransformer?: DazlPostcssPluginValue;
 }
-
-export type DazlPostcssPluginOptions = DazlPluginLoaderOptions;
