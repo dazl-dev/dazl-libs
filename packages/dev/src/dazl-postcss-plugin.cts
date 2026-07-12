@@ -29,7 +29,6 @@ const dazlPostcssPlugin: DazlPostcssPluginLoader = Object.assign(
                 if (!plugin) {
                     return;
                 }
-
                 await runPlugin(root, helpers, plugin);
             },
         };
@@ -38,7 +37,3 @@ const dazlPostcssPlugin: DazlPostcssPluginLoader = Object.assign(
 );
 
 module.exports = dazlPostcssPlugin;
-const exportsObject = module.exports as {
-    dazlPostcssPlugin?: DazlPostcssPluginLoader;
-};
-exportsObject.dazlPostcssPlugin = dazlPostcssPlugin;
