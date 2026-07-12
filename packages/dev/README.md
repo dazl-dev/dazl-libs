@@ -25,11 +25,6 @@ The plugin registration is synchronous so it works in configs that do not allow
 async plugin setup. The actual transformer module is loaded lazily on first CSS
 transformation.
 
-The loader reads:
-
-- `DAZL_PLUGIN_SPECIFIER` (required): module specifier for the Dazl plugin module
-- `DAZL_PREVIEW_SCRIPT_URL` (optional): forwarded to the transformer when supported
-
 ## License
 
 MIT

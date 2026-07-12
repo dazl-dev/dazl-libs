@@ -32,8 +32,7 @@ export async function resolveDazlPostcssPlugin(
 
     const module = (await import(pluginSpecifier)) as DazlPostcssPluginModule;
 
-    const pluginOrFactory =
-        module.dazlPostcssPlugin || module.dazlPostCSSPlugin || module.postcssPlugin || module.cssTransformer;
+    const pluginOrFactory = module.dazlPostcssPlugin;
 
     if (!pluginOrFactory) {
         throw new Error(
