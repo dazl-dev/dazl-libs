@@ -15,7 +15,7 @@ function runPlugin(root: Root, helpers: Helpers, plugin: AcceptedPlugin): Promis
 
 const dazlPostcssPlugin: DazlPostcssPluginLoader = Object.assign(
     function dazlPostcssPlugin(): AcceptedPlugin {
-        let pluginPromise: Promise<AcceptedPlugin> | undefined;
+        let pluginPromise: Promise<AcceptedPlugin | undefined> | undefined;
 
         return {
             postcssPlugin: 'dazl-postcss-plugin-cjs-loader',
@@ -24,7 +24,11 @@ const dazlPostcssPlugin: DazlPostcssPluginLoader = Object.assign(
                     return resolveDazlPostcssPlugin();
                 });
 
-                await runPlugin(root, helpers, await pluginPromise);
+                const plugin = await pluginPromise;
+                if (!plugin) {
+                    return;
+                }
+                await runPlugin(root, helpers, plugin);
             },
         };
     },
