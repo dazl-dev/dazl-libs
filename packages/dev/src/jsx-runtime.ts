@@ -18,26 +18,25 @@ const getComponentName = (type: unknown): string | undefined => {
     return undefined;
 };
 
-// Source tracking can be turned off entirely (DAZL_SOURCE_TRACKING_DISABLED)
-// or for specific components by displayName/name (DAZL_SOURCE_TRACKING_DISABLED_COMPONENTS,
-// a comma-separated list).
-const sourceTrackingDisabled = env.DAZL_SOURCE_TRACKING_DISABLED === 'true';
-const disabledComponentNames = new Set(
-    (env.DAZL_SOURCE_TRACKING_DISABLED_COMPONENTS ?? '')
+// RSC source tracking can be turned off entirely (DAZL_RSC_SOURCE_TRACKING_DISABLED), in
+// which case the original jsxDEV is used for server components and no patching happens. It
+// can also be turned off for specific components by displayName/name
+// (DAZL_RSC_SOURCE_TRACKING_DISABLED_COMPONENTS, a comma-separated list). These flags only
+// affect React Server Components.
+const rscSourceTrackingDisabled = env.DAZL_RSC_SOURCE_TRACKING_DISABLED === 'true';
+const disabledRscComponentNames = new Set(
+    (env.DAZL_RSC_SOURCE_TRACKING_DISABLED_COMPONENTS ?? '')
         .split(',')
         .map((name) => name.trim())
         .filter(Boolean),
 );
 
-const isSourceTrackingDisabled = (type: unknown): boolean => {
-    if (sourceTrackingDisabled) {
-        return true;
-    }
-    if (disabledComponentNames.size === 0) {
+const isRscSourceTrackingDisabled = (type: unknown): boolean => {
+    if (disabledRscComponentNames.size === 0) {
         return false;
     }
     const name = getComponentName(type);
-    return name !== undefined && disabledComponentNames.has(name);
+    return name !== undefined && disabledRscComponentNames.has(name);
 };
 
 const generateKeyFromJSXSource = (source: ReactDevRuntime.JSXSource) => {
@@ -47,7 +46,7 @@ const generateKeyFromJSXSource = (source: ReactDevRuntime.JSXSource) => {
 const propsToSource = new WeakMap<object, ReactDevRuntime.JSXSource>();
 
 const jsxDEVKeepSource: typeof ReactDevRuntime.jsxDEV = (type, props, key, isStatic, source, self) => {
-    if (!source || isSourceTrackingDisabled(type)) {
+    if (!source) {
         return ReactDevRuntime.jsxDEV(type, props, key, isStatic, source, self);
     }
 
@@ -80,7 +79,7 @@ const jsxDEVKeepSource: typeof ReactDevRuntime.jsxDEV = (type, props, key, isSta
 };
 
 const jsxDEVServerComponents: typeof ReactDevRuntime.jsxDEV = (type, props, key, isStatic, source, self) => {
-    if (!source || isSourceTrackingDisabled(type)) {
+    if (!source || isRscSourceTrackingDisabled(type)) {
         return ReactDevRuntime.jsxDEV(type, props, key, isStatic, source, self);
     }
 
@@ -126,5 +125,7 @@ export { createElement } from 'react';
 export const jsxDEV: typeof ReactDevRuntime.jsxDEV = isBrowser
     ? jsxDEVKeepSource
     : isServerComponent
-      ? jsxDEVServerComponents
+      ? rscSourceTrackingDisabled
+          ? ReactDevRuntime.jsxDEV
+          : jsxDEVServerComponents
       : ReactDevRuntime.jsxDEV;
