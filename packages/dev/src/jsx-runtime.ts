@@ -18,13 +18,14 @@ const getComponentName = (type: unknown): string | undefined => {
     return undefined;
 };
 
-// RSC source tracking can be turned off entirely (DAZL_RSC_SOURCE_TRACKING_DISABLED), in
-// which case the original jsxDEV is used for server components and no patching happens. It
-// can also be turned off for all components (DAZL_RSC_SOURCE_TRACKING_DISABLED_ALL_COMPONENTS,
-// leaving host elements such as `div` tracked), or for specific components by
-// displayName/name (DAZL_RSC_SOURCE_TRACKING_DISABLED_COMPONENTS, a comma-separated list).
-// These flags only affect React Server Components.
-const rscSourceTrackingDisabled = env.DAZL_RSC_SOURCE_TRACKING_DISABLED === 'true';
+// RSC source tracking is opt-in and off by default. It is enabled with
+// DAZL_RSC_SOURCE_TRACKING_ENABLED=true; when unset (or not 'true') the original jsxDEV is
+// used for server components and no patching happens. When enabled, it can be turned off for
+// all components (DAZL_RSC_SOURCE_TRACKING_DISABLED_ALL_COMPONENTS, leaving host elements
+// such as `div` tracked), or for specific components by displayName/name
+// (DAZL_RSC_SOURCE_TRACKING_DISABLED_COMPONENTS, a comma-separated list). These flags only
+// affect React Server Components.
+const rscSourceTrackingEnabled = env.DAZL_RSC_SOURCE_TRACKING_ENABLED === 'true';
 const rscComponentsSourceTrackingDisabled = env.DAZL_RSC_SOURCE_TRACKING_DISABLED_ALL_COMPONENTS === 'true';
 const disabledRscComponentNames = new Set(
     (env.DAZL_RSC_SOURCE_TRACKING_DISABLED_COMPONENTS ?? '')
@@ -130,7 +131,7 @@ export { createElement } from 'react';
 export const jsxDEV: typeof ReactDevRuntime.jsxDEV = isBrowser
     ? jsxDEVKeepSource
     : isServerComponent
-      ? rscSourceTrackingDisabled
-          ? ReactDevRuntime.jsxDEV
-          : jsxDEVServerComponents
+      ? rscSourceTrackingEnabled
+          ? jsxDEVServerComponents
+          : ReactDevRuntime.jsxDEV
       : ReactDevRuntime.jsxDEV;
