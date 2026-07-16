@@ -2,7 +2,7 @@ import * as ReactDevRuntime from 'react/jsx-dev-runtime';
 import * as React from 'react';
 
 const isBrowser = typeof window !== 'undefined';
-const isServerComponent = !React.Component;
+const isServerRendering = !React.Component;
 const isObjectLike = (value: unknown) => typeof value === 'object' && value !== null;
 
 const env = typeof process !== 'undefined' && process.env ? process.env : {};
@@ -130,7 +130,7 @@ export { Fragment, jsx, jsxs, type JSX } from 'react/jsx-runtime';
 export { createElement } from 'react';
 export const jsxDEV: typeof ReactDevRuntime.jsxDEV = isBrowser
     ? jsxDEVKeepSource
-    : isServerComponent
+    : isServerRendering
       ? rscSourceTrackingEnabled
           ? jsxDEVServerComponents
           : ReactDevRuntime.jsxDEV
