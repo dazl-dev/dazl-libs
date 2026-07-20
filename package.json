@@ -27,6 +27,7 @@
     "@eslint/js": "^10.0.1",
     "@playwright/browser-chromium": "^1.61.1",
     "@playwright/test": "^1.61.1",
+    "@rsbuild/core": "^2.1.4",
     "@types/chai": "^5.2.3",
     "@types/node": "24",
     "@types/react": "^19.2.17",
