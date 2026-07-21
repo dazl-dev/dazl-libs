@@ -72,3 +72,6 @@ export function dazlPostcssPlugin(): DazlPostcssPlugin {
         },
     };
 }
+
+dazlPostcssPlugin.postcss = true as const;
+export default dazlPostcssPlugin;
