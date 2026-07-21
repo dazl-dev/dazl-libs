@@ -15,6 +15,34 @@ Source tracking can be controlled with the following environment variables. Thes
 - `DAZL_RSC_SOURCE_TRACKING_DISABLED_ALL_COMPONENTS` — set to `true` to disable RSC source tracking for all components (function types), while host elements such as `div` remain tracked.
 - `DAZL_RSC_SOURCE_TRACKING_DISABLED_COMPONENTS` — a comma-separated list of component `displayName`/`name` values (host tag names such as `div` also match) to disable RSC source tracking for specific components only.
 
+## PostCSS Plugin (Non-Vite)
+
+You can load Dazl's CSS transformer as a PostCSS plugin:
+
+```ts
+import { dazlPostcssPlugin } from '@dazl/dev/dazl-postcss-plugin';
+
+const plugin = dazlPostcssPlugin();
+
+export default {
+  plugins: [plugin],
+};
+```
+
+Or reference it by module specifier in a `postcss.config.js`:
+
+```js
+module.exports = {
+  plugins: {
+    '@dazl/dev/dazl-postcss-plugin': {},
+  },
+};
+```
+
+The plugin registration is synchronous so it works in configs that do not allow
+async plugin setup. The actual transformer module is loaded lazily on first CSS
+transformation.
+
 ## License
 
 MIT

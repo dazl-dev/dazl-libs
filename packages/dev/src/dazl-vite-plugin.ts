@@ -1,12 +1,8 @@
 import { version as viteVersion } from 'vite';
 import type { PluginOption } from 'vite';
+import type { DazlVitePluginFactory } from './dazl-plugin-types.js';
 
-interface DazlVitePluginOptions {
-    previewScriptUrl?: string;
-    viteVersion?: string;
-}
-
-type DazlPlugins = (options: DazlVitePluginOptions) => Promise<PluginOption[]>;
+type DazlPlugins = DazlVitePluginFactory<PluginOption>;
 
 /** Loads the dazl vite plugin from the env vars dazl sets when starting the dev server (no-op otherwise). */
 export async function dazlVitePlugin(): Promise<PluginOption> {

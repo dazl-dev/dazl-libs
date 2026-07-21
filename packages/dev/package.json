@@ -8,6 +8,11 @@
     "./jsx-runtime": "./dist/jsx-runtime.js",
     "./jsx-dev-runtime": "./dist/jsx-runtime.js",
     "./dazl-vite-plugin": "./dist/dazl-vite-plugin.js",
+    "./dazl-postcss-plugin": {
+      "require": "./dist/dazl-postcss-plugin.cjs",
+      "import": "./dist/dazl-postcss-plugin.js"
+    },
+    "./dazl-plugin-types": "./dist/dazl-plugin-types.js",
     "./package.json": "./package.json"
   },
   "types": "./dist/jsx-runtime.d.ts",
@@ -21,6 +26,12 @@
       ],
       "dazl-vite-plugin": [
         "./dist/dazl-vite-plugin.d.ts"
+      ],
+      "dazl-postcss-plugin": [
+        "./dist/dazl-postcss-plugin.d.ts"
+      ],
+      "dazl-plugin-types": [
+        "./dist/dazl-plugin-types.d.ts"
       ]
     }
   },
