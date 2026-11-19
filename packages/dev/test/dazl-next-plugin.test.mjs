@@ -88,7 +88,7 @@ test('development resolves an async config before passing it to the plugin', asy
 test('non-development phases bypass the plugin', async (t) => {
     const specifier = await createPlugin(
         t,
-        'export function dazlNextConfig() { throw new Error("plugin must not run"); }',
+        'export function dazlNextConfig() { return { instrumented: true }; }',
     );
     await withPluginSpecifier(specifier, async () => {
         const config = { reactStrictMode: true };
