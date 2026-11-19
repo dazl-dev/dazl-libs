@@ -34,7 +34,7 @@
     "directory": "packages/component-gallery"
   },
   "dependencies": {
-    "zod": "^4.4.3"
+    "zod": "^4.6.5"
   },
   "peerDependencies": {
     "react": ">=19.0.0"
