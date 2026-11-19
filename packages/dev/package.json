@@ -12,6 +12,7 @@
       "require": "./dist/dazl-postcss-plugin.cjs",
       "import": "./dist/dazl-postcss-plugin.js"
     },
+    "./next": "./dist/dazl-next-plugin.js",
     "./dazl-plugin-types": "./dist/dazl-plugin-types.js",
     "./package.json": "./package.json"
   },
@@ -29,6 +30,9 @@
       ],
       "dazl-postcss-plugin": [
         "./dist/dazl-postcss-plugin.d.ts"
+      ],
+      "next": [
+        "./dist/dazl-next-plugin.d.ts"
       ],
       "dazl-plugin-types": [
         "./dist/dazl-plugin-types.d.ts"
