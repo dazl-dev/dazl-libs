@@ -3,6 +3,9 @@
   "version": "1.7.0",
   "description": "Dazl development time utilities.",
   "type": "module",
+  "scripts": {
+    "test": "node --test test/*.test.mjs"
+  },
   "exports": {
     ".": "./dist/jsx-runtime.js",
     "./jsx-runtime": "./dist/jsx-runtime.js",
@@ -12,6 +15,7 @@
       "require": "./dist/dazl-postcss-plugin.cjs",
       "import": "./dist/dazl-postcss-plugin.js"
     },
+    "./next": "./dist/dazl-next-plugin.js",
     "./dazl-plugin-types": "./dist/dazl-plugin-types.js",
     "./package.json": "./package.json"
   },
@@ -29,6 +33,9 @@
       ],
       "dazl-postcss-plugin": [
         "./dist/dazl-postcss-plugin.d.ts"
+      ],
+      "next": [
+        "./dist/dazl-next-plugin.d.ts"
       ],
       "dazl-plugin-types": [
         "./dist/dazl-plugin-types.d.ts"

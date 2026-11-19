@@ -15,6 +15,31 @@ Source tracking can be controlled with the following environment variables. Thes
 - `DAZL_RSC_SOURCE_TRACKING_DISABLED_ALL_COMPONENTS` — set to `true` to disable RSC source tracking for all components (function types), while host elements such as `div` remain tracked.
 - `DAZL_RSC_SOURCE_TRACKING_DISABLED_COMPONENTS` — a comma-separated list of component `displayName`/`name` values (host tag names such as `div` also match) to disable RSC source tracking for specific components only.
 
+## Next.js
+
+Wrap the Next.js config with `withDazl()` to enable Dazl's visual editing in `next dev`:
+
+```ts
+// next.config.ts
+import type { NextConfig } from 'next';
+import { withDazl } from '@dazl/dev/next';
+
+const nextConfig: NextConfig = {
+  reactStrictMode: true,
+};
+
+export default withDazl(nextConfig);
+```
+
+Outside Dazl, `withDazl()` returns the config unchanged. When Dazl runs `next dev`, it sets
+`DAZL_NEXT_PLUGIN_SPECIFIER`, and `withDazl()` lets Dazl's plugin add to the development config only:
+
+- a generated tsconfig that extends the app's own and sets `jsxImportSource: '@dazl/dev'`, so elements map to their JSX source;
+- a Turbopack loader for `.css` files, so CSS rules map to their source and their `:hover`/`:focus` states can be forced.
+
+A config exported as a function is supported. Builds and `next start` always get the app's config as is.
+Turbopack is required (the default `next dev` bundler since Next.js 16).
+
 ## PostCSS Plugin (Non-Vite)
 
 You can load Dazl's CSS transformer as a PostCSS plugin:
