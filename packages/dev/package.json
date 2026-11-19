@@ -3,6 +3,9 @@
   "version": "1.7.0",
   "description": "Dazl development time utilities.",
   "type": "module",
+  "scripts": {
+    "test": "node --test test/*.test.mjs"
+  },
   "exports": {
     ".": "./dist/jsx-runtime.js",
     "./jsx-runtime": "./dist/jsx-runtime.js",
